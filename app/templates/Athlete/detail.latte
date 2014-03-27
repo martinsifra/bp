@@ -1,0 +1,18 @@
+
+{block content}
+<h1 class="page-header">{$athlete->firstname}&nbsp;{$athlete->surname}</h1>
+
+<div class="btn-toolbar" role="toolbar">
+    <div class="btn-group">
+        <a n:href="User:edit $athlete->id" type="button" class="btn btn-default">Edit user</a>
+    </div>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>Jméno:</dt>
+    <dd>{$athlete->firstname}</dd>
+    <dt>Přijímení:</dt>
+    <dd>{$athlete->surname}</dd>
+    <dt>Datum narození:</dt>
+    <dd>{$athlete->birthdate|date:'j.n.Y'}</dd>
+</dl>

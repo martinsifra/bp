@@ -1,0 +1,20 @@
+{block scripts}
+    {include parent}
+    {control jsGrido}
+{/block}
+
+{block content}
+<h1 class="page-header">Tests</h1>
+
+<div class="btn-toolbar" role="toolbar">
+    <div class="btn-group">
+        <a href="new" type="button" class="btn btn-danger">New test</a>
+    </div>
+    <div class="btn-group">
+        <a type="button" class="btn btn-default">Export</a>
+        <a type="button" class="btn btn-default">Import</a>
+        <a type="button" class="btn btn-default">Print</a>
+    </div>
+</div>
+
+{control grid}

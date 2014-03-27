@@ -1,0 +1,52 @@
+extensions:
+    webloader: WebLoader\Nette\Extension
+
+services:
+    wlCssFilter: WebLoader\Filter\CssUrlsFilter(%wwwDir%)
+    lessFilter: WebLoader\Filter\LessFilter
+    cssMinFilter: Webloader\Filter\CssMinFilter
+
+webloader:
+    css:
+        default:
+            files:
+                - screen.css
+                - bootstrap.css
+                - bootstrap-theme.css
+                - typeahead.css
+                - grido.css
+                - font-awesome.css
+                - {files: ["*.css", "*.less"], from: %appDir%/presenters} # Nette\Utils\Finder support
+            filters:
+                - @wlCssFilter
+                - @cssMinFilter
+            fileFilters:
+                - @lessFilter
+            #joinFiles: false
+
+        grido:
+            files:
+                - typeahead.css
+                - grido.css
+
+    js:
+        default:
+            remoteFiles:
+                #- http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js
+                #- http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js
+            files:
+                - jquery.min.js
+                - bootstrap.min.js
+                - nette.ajax.js
+                - netteForms.js
+                - main.js
+                
+        grido:
+            files:
+                - grido.js
+                - grido.ext.js
+                - grido.ajax.js
+                - typeahead.min.js # Must be before jquery.ba-haschange.min.js
+                - jquery.ba-hashchange.min.js
+
+                
