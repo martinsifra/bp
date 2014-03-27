@@ -16,5 +16,11 @@ class RecordControl extends Control
     /** @var \App\Model\BaseModel */
     protected $model;
 
-    
+
+       public function render()
+    {
+        $template = $this->template;
+        $template->setFile(__DIR__ . '/BaseRecordControl.latte');
+        $template->render();
+    }
 }

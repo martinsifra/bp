@@ -22,13 +22,6 @@ class RecordControl extends \App\Components\Base\RecordControl
         $this->model = $model;
         $this->roles = $roles;
     }
-    
-    public function render()
-    {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/RecordControl.latte');
-        $template->render();
-    }
 
 	/**
 	 * Add form factory.
