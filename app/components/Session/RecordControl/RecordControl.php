@@ -13,13 +13,6 @@ class RecordControl extends \App\Components\Base\RecordControl
         $this->model = $model;
     }
     
-    public function render()
-    {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/RecordControl.latte');
-        $template->render();
-    }
-
 	/**
 	 * Add form factory.
 	 * @return Nette\Application\UI\Form
