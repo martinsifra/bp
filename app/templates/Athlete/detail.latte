@@ -4,7 +4,7 @@
 
 <div class="btn-toolbar" role="toolbar">
     <div class="btn-group">
-        <a n:href="User:edit $athlete->id" type="button" class="btn btn-default">Edit user</a>
+        <a n:href="Athlete:edit $athlete->id" type="button" class="btn btn-default">Edit user</a>
     </div>
 </div>
 
@@ -15,4 +15,24 @@
     <dd>{$athlete->surname}</dd>
     <dt>Datum narození:</dt>
     <dd>{$athlete->birthdate|date:'j.n.Y'}</dd>
+    <dt>Pohlaví:</dt>
+    <dd>{$athlete->sex}</dd>
 </dl>
+
+    
+<h2>Sessions</h2>
+
+<div class="row">
+{foreach $sessions as $session}
+<div class="col-sm-3">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{$session->title}</h3>
+    </div>
+    <div class="panel-body">
+        <a n:href="Athlete:session $athlete->id, $session->id" class="btn btn-primary">Více</a>
+    </div>
+</div>
+        </div>
+{/foreach}
+</div>

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Session extends \Kdyby\Doctrine\Entities\IdentifiedEntity
 {
     /**
-     * @ORM\OneToMany(targetEntity="Record", mappedBy="record")
+     * @ORM\OneToMany(targetEntity="Record", mappedBy="session")
      */
     protected $records;
 

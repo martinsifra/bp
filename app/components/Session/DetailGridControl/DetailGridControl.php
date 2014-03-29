@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 /*
  * 
  */
-class GridControl extends Control
+class DetailGridControl extends Control
 {
     
     /** @var \Kdyby\Doctrine\EntityManager */
@@ -20,7 +20,7 @@ class GridControl extends Control
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/GridControl.latte');
+        $template->setFile(__DIR__ . '/DetailGridControl.latte');
         $template->render();
     }
     
@@ -31,16 +31,17 @@ class GridControl extends Control
         $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
 
         //// Datasource ////
-        $repository = $this->em->getRepository('\App\Entities\Session');
-        $qb = $repository->createQueryBuilder('b');
-//                ->addSelect('a') // This will produce less SQL queries with prefetch.
-//                ->innerJoin('b.author', 'a');
+        $repository = $this->em->getRepository('\App\Entities\Record');
+        $qb = $repository->createQueryBuilder('r')
+                ->addSelect('a') // This will produce less SQL queries with prefetch.
+                ->join('r.athlete', 'a')
+                ->where('r.session = 1');
         
-        $model = new \Grido\DataSources\Doctrine($qb);//, array( // Map grido columns to the Author entity
-//            'firstname' => 'a.firstname',
-//            'surname' => 'a.surname',
-//            'birthdate' => 'a.surname'
-//        ));
+        $model = new \Grido\DataSources\Doctrine($qb, array(
+            'weight' => 'r.value',
+            'firstname' => 'a.firstname',
+//            'surname' => 'r.athlete',
+        ));
         $grid->model = $model;
         
         $grid->setDefaultSort(array('id' => 'DESC'));
@@ -48,11 +49,23 @@ class GridControl extends Control
         
         //// Columns ////
         $grid->addColumnText('id', 'ID');
-        
-        $grid->addColumnText('title', 'Title')
-            ->setSortable()
-            ->setFilterText()
-                ->setSuggestion();
+
+        $grid->addColumnText('firstname', 'Firstname');
+        $grid->addColumnText('surname', 'Surname');
+            
+            
+        $grid->addColumnText('weight', 'Váha')
+            ->setCustomRender(function($item){
+                return $item->record->value;
+            })
+            ->setSortable();
+//        
+//        $grid->addColumnText('surname', 'Surname')
+//            ->setSortable()
+//            ->setFilterText()
+//                ->setSuggestion();
+//        
+//        $grid->addColumnNumber('hmotnost', 'Hmotnost');
        
         
         //// Actions ////

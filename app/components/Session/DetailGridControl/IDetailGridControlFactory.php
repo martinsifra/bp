@@ -2,8 +2,8 @@
 
 namespace App\Components\Session;
 
-interface IGridControlFactory
+interface IDetailGridControlFactory
 {
-    /** @return GridControl */
+    /** @return DetailGridControl */
     function create();
 }

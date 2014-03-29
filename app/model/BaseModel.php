@@ -37,6 +37,14 @@ class BaseModel extends \Nette\Object
         return $this->dao->findPairs($criteria, $value, $key);
     }
     
+    public function findBy(array $criteria, mixed $orderBy = NULL, $limit = NULL, $offset = NULL)
+    {
+        return $this->dao->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+
+
+
     // Delete metoda bude soft delete
 
 }

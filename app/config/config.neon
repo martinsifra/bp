@@ -69,6 +69,7 @@ services:
     - App\Components\Record\IRecordControlFactory
 
     # Session' components
+    - App\Components\Session\IDetailGridControlFactory
     - App\Components\Session\IGridControlFactory
     - App\Components\Session\IRecordControlFactory
 

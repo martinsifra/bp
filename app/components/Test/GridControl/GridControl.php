@@ -43,13 +43,13 @@ class GridControl extends Control
 //        ));
         $grid->model = $model;
         
-        $grid->setDefaultSort(array('label' => 'ASC'));
+        $grid->setDefaultSort(array('name' => 'ASC'));
 
         
         //// Columns ////
         $grid->addColumnText('id', 'ID');
         
-        $grid->addColumnText('label', 'Label')
+        $grid->addColumnText('name', 'Name')
             ->setSortable()
             ->setFilterText()
                 ->setSuggestion();

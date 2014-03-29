@@ -11,12 +11,17 @@ class SessionPresenter extends BasePresenter
     /** @var \App\Model\SessionModel @inject */
     public $sessions;
     
+    /** @var \App\Model\AthleteModel @inject */
+    public $athletes;
+    
     /** @var \App\Components\Session\IRecordControlFactory @inject */
     public $recordControlFactory;
 
     /** @var \App\Components\Session\IGridControlFactory @inject */
     public $gridControlFactory;
-    
+ 
+    /** @var \App\Components\Session\IDetailGridControlFactory @inject */
+    public $detailGridControlFactory;   
     
     ///// Actions /////
     
@@ -28,6 +33,12 @@ class SessionPresenter extends BasePresenter
     public function actionDefault()
     {
         
+    }
+    
+    
+    public function actionDetail($id)
+    {
+        $this->template->records = $this->records->findBy(['session' => $id]);
     }
     
     
@@ -43,5 +54,11 @@ class SessionPresenter extends BasePresenter
     protected function createComponentGrid()
     {
         return $this->gridControlFactory->create();
+    }
+    
+    /** @return \App\Components\Session\DetailGridControl */
+    protected function createComponentDetailGrid()
+    {
+        return $this->detailGridControlFactory->create();
     }
 }

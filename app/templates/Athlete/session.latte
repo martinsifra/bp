@@ -1,0 +1,21 @@
+
+{block content}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Test</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $records as $record}
+    <tr>
+        <td>{$record->test->id}</td>
+        <td>{$record->test->name}</td>
+        <td>{$record->value}&nbsp;{$record->test->unit}</td>
+    </tr>
+{/foreach}
+    </tbody>
+</table>

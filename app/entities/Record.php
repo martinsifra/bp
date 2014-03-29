@@ -21,19 +21,19 @@ class Record extends \Kdyby\Doctrine\Entities\IdentifiedEntity
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="records")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     **/
+     */
     protected $session;
     
     /**
-     * @ORM\OneToOne(targetEntity="Test")
+     * @ORM\ManyToOne(targetEntity="Test", fetch="EAGER")
      * @ORM\JoinColumn(name="test_id", referencedColumnName="id")
-     **/
+     */
     protected $test;
     
     /**
      * @ORM\ManyToOne(targetEntity="Athlete", inversedBy="records")
      * @ORM\JoinColumn(name="athlete_id", referencedColumnName="id")
-     **/
+     */
     protected $athlete;
     
     /**

@@ -2,12 +2,6 @@
 
 namespace App\Components\Athlete;
 
-//use Nette\Security as NS,
-//    Nette, Model,
-//    Nette\Forms\Form,
-//	Nette\Forms\Controls;
-
-
 /**
  * Athlete record control
  * @property \App\Entities\Athlete $entity
@@ -45,6 +39,8 @@ class RecordControl extends \App\Components\Base\RecordControl
         $form->addText('birthdate', 'Birthdate:')
 			->setRequired('Please enter your date of birth.');
 
+        $form->addSelect('sex', 'Sex', ['' => '', 'male' => 'Male', 'female' => 'Female']);
+        
         $form->addText('email', 'E-mail:')
 			->setRequired('Please enter your e-mail address.');
         
@@ -79,6 +75,7 @@ class RecordControl extends \App\Components\Base\RecordControl
         $this->entity->firstname = $values->firstname;
         $this->entity->surname = $values->surname;
         $this->entity->birthdate = \Nette\DateTime::from($values->birthdate);
+        $this->entity->sex = $values->sex;
         $this->entity->email = $values->email;
         
         // 4) Persist and flush entity -> redirect to dafeult
@@ -100,6 +97,7 @@ class RecordControl extends \App\Components\Base\RecordControl
             'firstname' => $this->entity->firstname,
             'surname' => $this->entity->surname,
             'birthdate' => $this->entity->birthdate->format('Y-m-d'),
+            'sex' => $this->entity->sex,
             'email' => $this->entity->email
         ];
     }

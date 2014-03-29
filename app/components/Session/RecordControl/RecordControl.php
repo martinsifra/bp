@@ -12,7 +12,7 @@ class RecordControl extends \App\Components\Base\RecordControl
     public function __construct(\App\Model\SessionModel $model) {
         $this->model = $model;
     }
-    
+
 	/**
 	 * Add form factory.
 	 * @return Nette\Application\UI\Form

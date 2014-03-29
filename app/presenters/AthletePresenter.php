@@ -10,6 +10,12 @@ class AthletePresenter extends BasePresenter
     
     /** @var \App\Model\AthleteModel @inject */
     public $athletes;
+
+    /** @var \App\Model\SessionModel @inject */
+    public $sessions;
+
+    /** @var \App\Model\RecordModel @inject */
+    public $records;
     
     /** @var \App\Components\Athlete\IRecordControlFactory @inject */
     public $recordControlFactory;
@@ -40,6 +46,8 @@ class AthletePresenter extends BasePresenter
         $athlete = $this->loadItem($id);
         $this->template->athlete = $athlete;
         $this['record']->entity = $athlete;
+        
+        $this->template->sessions = $this->sessions->findByUser($athlete->id);
     }
     
     /**
@@ -52,6 +60,19 @@ class AthletePresenter extends BasePresenter
         $athlete = $this->loadItem($id);
         $this->template->athlete = $athlete;
         $this['record']->entity = $athlete;
+    }
+    
+    /**
+     * @secured
+     * @resource('athlete')
+     * @privilege('show')
+     */
+    public function actionSession($id, $session_id)
+    {
+        $this->template->records = $this->records->findBy([
+            'athlete' => $id,
+            'session' => $session_id,
+        ]);
     }
     
     /**

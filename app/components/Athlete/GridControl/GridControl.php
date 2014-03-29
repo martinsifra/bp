@@ -57,7 +57,7 @@ class GridControl extends Control
             ->setSortable();
         
         $grid->addColumnDate('birthdate', 'Birthdate')
-            ->setDateFormat('j.d.Y')
+            ->setDateFormat('j.n.Y')
             ->setSortable()
             ->setFilterDateRange();
         
