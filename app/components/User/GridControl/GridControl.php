@@ -2,28 +2,12 @@
 
 namespace App\Components\User;
 
-use Nette\Application\UI\Control;
-
 /*
  * 
  */
-class GridControl extends Control
+class GridControl extends \App\Components\Base\GridControl
 {
-    
-    /** @var \Kdyby\Doctrine\EntityManager */
-    public $em;
 
-    public function __construct(\Kdyby\Doctrine\EntityManager $em) {
-        $this->em = $em; 
-    }
-    
-    public function render()
-    {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/GridControl.latte');
-        $template->render();
-    }
-    
     protected function createComponentGrido($name)
     {
         $grid = new \Grido\Grid($this, $name);

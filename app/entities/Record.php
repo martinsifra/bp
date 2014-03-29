@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Martin Šifra <me@martinsifra.cz>
  * 
  * @ORM\Entity
- * @ORM\Table(name="record")
+ * @ORM\Table(name="record", uniqueConstraints={@ORM\UniqueConstraint(name="unique_idx", columns={"session_id", "test_id", "athlete_id"})})
  * 
  * @property \App\Entities\Session $session
  * @property \App\Entities\Test $test

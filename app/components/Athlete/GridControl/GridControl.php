@@ -2,27 +2,11 @@
 
 namespace App\Components\Athlete;
 
-use Nette\Application\UI\Control;
-
-/*
+/**
  * 
  */
-class GridControl extends Control
+class GridControl extends \App\Components\Base\GridControl
 {
-    
-    /** @var \Kdyby\Doctrine\EntityManager */
-    public $em;
-
-    public function __construct(\Kdyby\Doctrine\EntityManager $em) {
-        $this->em = $em; 
-    }
-    
-    public function render()
-    {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/GridControl.latte');
-        $template->render();
-    }
     
     protected function createComponentGrido($name)
     {
@@ -76,7 +60,7 @@ class GridControl extends Control
             
         $grid->addActionHref('record', 'New record')
             ->setCustomHref(function($item) {
-                return $this->presenter->link('Record:new', ['user_id' => $item->id]);   
+                return $this->presenter->link('Record:new', ['athlete_id' => $item->id]);   
             })
             ->setIcon('asterisk')
             ->setDisable(function() {

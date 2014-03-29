@@ -38,7 +38,7 @@ class RecordControl extends \App\Components\Base\RecordControl
         $form->addSelect('athlete_id', 'Athlete:', $this->athletes->findPairs('username', 'id'));
 //                ->setDefaultValue($this->defaults['user_id']);
         
-        $form->addSelect('test_id', 'Test:', $this->tests->findPairs('label', 'id'));
+        $form->addSelect('test_id', 'Test:', $this->tests->findPairs('name', 'id'));
         
         $form->addText('value', 'Value:');
         

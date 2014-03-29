@@ -21,7 +21,7 @@ class Athlete extends User
     
     /**
      * @ORM\Column(type="string", length=16)
-     */
+     */ 
     protected $sex;
     
     /**
