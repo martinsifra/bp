@@ -32,6 +32,8 @@ class GridControl extends \App\Components\Base\GridControl
         
         //// Columns ////
         $grid->addColumnText('id', 'ID');
+
+        $grid->addColumnText('slug', 'Slug');
         
         $grid->addColumnText('name', 'Name')
             ->setSortable()

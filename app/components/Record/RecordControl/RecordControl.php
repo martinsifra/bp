@@ -6,7 +6,7 @@ namespace App\Components\Record;
  * Record control
  * @property \App\Entities\Record $entity
  */
-class RecordControl extends \App\Components\Base\RecordControl
+class RecordControl extends \App\Components\Base\FormControl
 {    
     
     /** @var \App\Model\AthleteModel */
@@ -17,32 +17,35 @@ class RecordControl extends \App\Components\Base\RecordControl
 
     /** @var \App\Model\TestModel */
     private $tests;
+
     
-    public function __construct(\App\Model\RecordModel $model, \App\Model\AthleteModel $athletes, \App\Model\SessionModel $sessions, \App\Model\TestModel $tests) {
+    public function __construct(\App\Model\RecordModel $model, \App\Model\AthleteModel $athletes, \App\Model\SessionModel $sessions, \App\Model\TestModel $tests)
+    {
         $this->model = $model;
         $this->athletes = $athletes;
         $this->sessions = $sessions;
         $this->tests = $tests;
     }
 
-	/**
-	 * Add form factory.
-	 * @return Nette\Application\UI\Form
-	 */
+    
+	/** @return Nette\Application\UI\Form */
 	protected function createComponentForm()
 	{
-		$form = new \BootstrapForm();
-
-        $form->addSelect('session_id', 'Session:', $this->sessions->findPairs('title', 'id'));
+		$form = new \Nette\Application\UI\Form();
+        $form->setRenderer(new \Nextras\Forms\Rendering\Bs3FormRenderer());
         
-        $form->addSelect('athlete_id', 'Athlete:', $this->athletes->findPairs('username', 'id'));
-//                ->setDefaultValue($this->defaults['user_id']);
+        $form->addSelect('session_id', 'Měření:', $this->sessions->findPairs('title', 'id'))
+                ->setDisabled($this->entity);
         
-        $form->addSelect('test_id', 'Test:', $this->tests->findPairs('name', 'id'));
+        $form->addSelect('athlete_id', 'Závodník:', $this->athletes->findPairs('username', 'id'))
+                ->setDisabled($this->entity);
         
-        $form->addText('value', 'Value:');
+        $form->addSelect('test_id', 'Test:', $this->tests->findPairs('name', 'id'))
+                ->setDisabled($this->entity);
+                
+        $form->addText('value', 'Hodnota:');
         
-		$form->addSubmit('save', 'Save');
+		$form->addSubmit('save', 'Uložit');
         
 		// Call on success
 		$form->onSuccess[] = $this->formSucceeded;
@@ -55,15 +58,18 @@ class RecordControl extends \App\Components\Base\RecordControl
         // 1) Load data from form
 		$values = $form->getValues();
 
-        // TODO: Check all id's validity (user, session, test)
-        $athlete = $this->athletes->find($values->athlete_id);
-        $session = $this->sessions->find($values->session_id);
-        $test = $this->tests->find($values->test_id);
-        
-        
         // 2) Recognize add or edit of record
         if (!$this->entity) {
             $this->entity = new \App\Entities\Record();
+
+            // TODO: Check all id's validity (user, session, test) - only when new record
+            $athlete = $this->athletes->find($values->athlete_id);
+            $session = $this->sessions->find($values->session_id);
+            $test = $this->tests->find($values->test_id);
+            
+            $this->entity->athlete = $athlete;
+            $this->entity->session = $session;
+            $this->entity->test = $test;
             
             $message = 'New record was successfuly saved!';
         } else {
@@ -71,31 +77,28 @@ class RecordControl extends \App\Components\Base\RecordControl
         }
 
         // 3) Map data from form to entity
-        $this->entity->athlete = $athlete;
-        $this->entity->session = $session;
-        $this->entity->test = $test;
         $this->entity->value = $values->value;
         
         // 4) Persist and flush entity -> redirect to dafeult
         $this->model->save($this->entity);
         $this->presenter->flashMessage($message, 'success');
-        $this->presenter->redirect('Athlete:');
+        $this->presenter->redirect('Athlete:session', [$this->entity->athlete->id, $this->entity->session->id]);
 	}
     
-    public function setEntity(\App\Entities\Athlete $entity)
+    public function setEntity(\App\Entities\Record $entity)
     {
         $this->entity = $entity;
         $this['form']->setDefaults($this->loadDefaults());
     }
     
+    /** @return array */
     private function loadDefaults()
     {
         return [
-            'username' => $this->entity->username,
-            'firstname' => $this->entity->firstname,
-            'surname' => $this->entity->surname,
-            'birthdate' => $this->entity->birthdate->format('Y-m-d'),
-            'email' => $this->entity->email
+            'session_id' => $this->entity->session->id,
+            'athlete_id' => $this->entity->athlete->id,
+            'test_id' => $this->entity->test->id,
+            'value' => $this->entity->value
         ];
     }
 }

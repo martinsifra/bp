@@ -2,8 +2,8 @@
 
 namespace App\Components\Athlete;
 
-interface IRecordControlFactory
+interface IRecordGridControlFactory
 {
-    /** @return RecordControl */
+    /** @return RecordGridControl */
     function create();
 }

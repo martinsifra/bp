@@ -17,11 +17,17 @@ class AthletePresenter extends BasePresenter
     /** @var \App\Model\RecordModel @inject */
     public $records;
     
-    /** @var \App\Components\Athlete\IRecordControlFactory @inject */
-    public $recordControlFactory;
+    /** @var \App\Components\Athlete\IFormControlFactory @inject */
+    public $formControlFactory;
 
     /** @var \App\Components\Athlete\IGridControlFactory @inject */
     public $gridControlFactory;
+
+    /** @var \App\Components\Athlete\IRecordGridControlFactory @inject */
+    public $recordGridControlFactory;
+    
+    /** @var \App\Components\Athlete\ISessionGridControlFactory @inject */
+    public $sessionGridControlFactory;
     
     
     ///// Actions /////
@@ -43,11 +49,11 @@ class AthletePresenter extends BasePresenter
      */
     public function actionDetail($id)
     {
-        $athlete = $this->loadItem($id);
+        $athlete = $this->loadItem($this->athletes, $id);
         $this->template->athlete = $athlete;
-        $this['record']->entity = $athlete;
-        
-        $this->template->sessions = $this->sessions->findByUser($athlete->id);
+        $this['form']->entity = $athlete;
+
+        $this['sessionGrid']->setParams($id);
     }
     
     /**
@@ -57,9 +63,9 @@ class AthletePresenter extends BasePresenter
      */
     public function actionEdit($id)
     {
-        $athlete = $this->loadItem($id);
+        $athlete = $this->loadItem($this->athletes, $id);
         $this->template->athlete = $athlete;
-        $this['record']->entity = $athlete;
+        $this['form']->entity = $athlete;
     }
     
     /**
@@ -69,6 +75,11 @@ class AthletePresenter extends BasePresenter
      */
     public function actionSession($id, $session_id)
     {
+        $this->template->athlete = $this->loadItem($this->athletes, $id);
+        $this->template->session = $this->loadItem($this->sessions, $session_id);
+        
+        $this['recordGrid']->setParams($id, $session_id);
+        
         $this->template->records = $this->records->findBy([
             'athlete' => $id,
             'session' => $session_id,
@@ -98,10 +109,10 @@ class AthletePresenter extends BasePresenter
     
     ///// Components /////
 
-    /** @return \App\Components\Athlete\RecordControl */
-    protected function createComponentRecord()
+    /** @return \App\Components\Athlete\FormControl */
+    protected function createComponentForm()
     {
-        return $this->recordControlFactory->create();
+        return $this->formControlFactory->create();
     }    
     
     /** @return \App\Components\Athlete\GridControl */
@@ -109,37 +120,35 @@ class AthletePresenter extends BasePresenter
     {
         return $this->gridControlFactory->create();
     }
-
+    
+    /** @return \App\Components\Athlete\RecordGridControl */
+    protected function createComponentRecordGrid()
+    {
+        return $this->recordGridControlFactory->create();
+    }
+    
+    /** @return \App\Components\Athlete\SessionGridControl */
+    protected function createComponentSessionGrid()
+    {
+        return $this->sessionGridControlFactory->create();
+    }
+    
     
     //// Other methods ////
     
     /**
-     * 
-     * @param type $id
-     * @return \App\Entities\Athlete
+     * @param \App\Model\BaseModel $model
+     * @param int $id
+     * @return \Kdyby\Doctrine\Entities\IdentifiedEntity
      */
-    protected function loadItem($id)
+    protected function loadItem($model, $id)
     {
-        $item = $this->athletes->find($id);
+        $item = $model->find($id);
         
         if (!$item) {
             $this->flashMessage("Item with id $id does not exist", 'warning');
-            $this->redirect('default'); // aka items list
+            $this->redirect('default');
         }
         return $item;
-    }
-    
-    
-    /**
-     * 
-     * @param \App\Entities\Athlete $entity
-     * @return array
-     */
-    public function loadDefaults(\App\Entities\Athlete $athlete)
-    {
-        return [
-            'firstname' => $athlete->firstname,
-            'surname' => $athlete->surname
-        ];
     }
 }

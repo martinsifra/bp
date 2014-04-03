@@ -5,10 +5,10 @@ namespace App\Components\Base;
 use     Nette\Application\UI\Control;
 
 /**
- * Record control
+ * Form control
  * @author Martin Šifra <me@martinsifra.cz>
  */
-class RecordControl extends Control 
+class FormControl extends Control 
 {
     /** @var \Kdyby\Doctrine\Entities\IdentifiedEntity */
     protected $entity = NULL;
@@ -19,7 +19,7 @@ class RecordControl extends Control
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/BaseRecordControl.latte');
+        $template->setFile(__DIR__ . '/FormControl.latte');
         $template->render();
     }    
 }

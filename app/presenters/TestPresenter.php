@@ -47,7 +47,7 @@ class TestPresenter extends BasePresenter
      */
     public function actionDetail($id)
     {
-        $test = $this->loadItem($id);
+        $test = $this->loadItem($this->tests, $id);
         $this->template->test = $test;
         $this['record']->entity = $test;
     }
@@ -66,22 +66,5 @@ class TestPresenter extends BasePresenter
     {
         return $this->gridControlFactory->create();
     }
-    
-    
-    //// Other methods ////
-    
-    /**
-     * @param type $id
-     * @return \App\Entities\Test
-     */
-    protected function loadItem($id)
-    {
-        $item = $this->tests->find($id);
-        
-        if (!$item) {
-            $this->flashMessage("Item with id $id does not exist", 'warning');
-            $this->redirect('default'); // Items list
-        }
-        return $item;
-    }
+
 }

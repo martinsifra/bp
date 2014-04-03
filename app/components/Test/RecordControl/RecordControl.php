@@ -11,7 +11,7 @@ Namespace App\Components\Test;
 /**
  * @property \App\Entities\Test $entity
  */
-class RecordControl extends \App\Components\Base\RecordControl
+class RecordControl extends \App\Components\Base\FormControl
 {    
     
     public function __construct(\App\Model\TestModel $model) {
@@ -24,9 +24,12 @@ class RecordControl extends \App\Components\Base\RecordControl
 	 */
 	protected function createComponentForm()
 	{   
-		$form = new \BootstrapForm();
+		$form = new \Nette\Application\UI\Form();
+        $form->setRenderer(new \Nextras\Forms\Rendering\Bs3FormRenderer());
         
-		$form->addText('label', 'Label:')
+        $form->addText('slug', 'Slug');
+        
+		$form->addText('name', 'Name:')
 			->setRequired('Please enter test\'s name.');
         
 		$form->addTextArea('desc', 'Description:');
@@ -58,7 +61,8 @@ class RecordControl extends \App\Components\Base\RecordControl
         }
 
         // 3) Map data from form to entity
-        $this->entity->label = $values->label;
+        $this->entity->slug = $values->slug;
+        $this->entity->name = $values->name;
         $this->entity->description = $values->desc;
         $this->entity->eval = $values->eval;
         $this->entity->unit = $values->unit;       
@@ -78,7 +82,8 @@ class RecordControl extends \App\Components\Base\RecordControl
     private function loadDefaults()
     {
         return [
-            'label' => $this->entity->label,
+            'slug' => $this->entity->slug,
+            'name' => $this->entity->name,
             'desc' => $this->entity->description,
             'eval' => $this->entity->eval,
             'unit' => $this->entity->unit

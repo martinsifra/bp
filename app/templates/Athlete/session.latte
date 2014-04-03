@@ -1,21 +1,14 @@
 
 {block content}
+<h1 class="page-header"> Měření <small>{$athlete->firstname} {$athlete->surname}</small></h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Test</th>
-            <th>Value</th>
-        </tr>
-    </thead>
-    <tbody>
-{foreach $records as $record}
-    <tr>
-        <td>{$record->test->id}</td>
-        <td>{$record->test->name}</td>
-        <td>{$record->value}&nbsp;{$record->test->unit}</td>
-    </tr>
-{/foreach}
-    </tbody>
-</table>
+<div class="btn-toolbar" role="toolbar">
+    <a n:href="Athlete:detail $athlete->id" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>{$session->title}</h2>
+        {control recordGrid}
+    </div>
+</div>

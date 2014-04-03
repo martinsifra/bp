@@ -26,6 +26,10 @@ nette:
         autoStart: smart
         expiration: +30 days
 
+    latte:
+        macros:
+            - Nextras\Forms\Bridges\Latte\Macros\BS3InputMacros
+
 doctrine:
     metadata:
         App: %appDir%
@@ -41,9 +45,11 @@ services:
     # Authenticator
     - App\Authenticator(@doctrine.dao(App\Entities\User))
 
+
     # Router
     - App\RouterFactory
     router: @App\RouterFactory::createRouter
+
 
     # Model
     - App\Model\BookModel(@doctrine.dao(App\Entities\Book)) # TODO: Delete
@@ -55,15 +61,13 @@ services:
     - App\Model\TestModel(@doctrine.dao(App\Entities\Test))
     - App\Model\UserModel(@doctrine.dao(App\Entities\User))
 
-    # Presenters
-    #LocalBasePresenter:
 
     # Components' factories
-    - App\Components\IGridBookControlFactory # TODO: Delete
-
     # Athletes' components
     - App\Components\Athlete\IGridControlFactory
-    - App\Components\Athlete\IRecordControlFactory
+    - App\Components\Athlete\IFormControlFactory
+    - App\Components\Athlete\IRecordGridControlFactory
+    - App\Components\Athlete\ISessionGridControlFactory
 
     # Records' components
     - App\Components\Record\IRecordControlFactory

@@ -1,39 +1,32 @@
 
 {block content}
-<h1 class="page-header">{$athlete->firstname}&nbsp;{$athlete->surname}</h1>
+<h1 class="page-header">Závodník <small>{$athlete->firstname} {$athlete->surname}</small></h1>
 
 <div class="btn-toolbar" role="toolbar">
-    <div class="btn-group">
-        <a n:href="Athlete:edit $athlete->id" type="button" class="btn btn-default">Edit user</a>
-    </div>
+    <a n:href="Athlete:" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
+    <a n:href="Athlete:edit $athlete->id" type="button" class="btn btn-default"><i class="fa fa-edit"></i> Upravit</a>
+    <a n:href="remove! $athlete->id" type="button" class="btn btn-default" title="Odstranit"><i class="fa fa-trash-o"></i></a>
 </div>
-
-<dl class="dl-horizontal">
-    <dt>Jméno:</dt>
-    <dd>{$athlete->firstname}</dd>
-    <dt>Přijímení:</dt>
-    <dd>{$athlete->surname}</dd>
-    <dt>Datum narození:</dt>
-    <dd>{$athlete->birthdate|date:'j.n.Y'}</dd>
-    <dt>Pohlaví:</dt>
-    <dd>{$athlete->sex}</dd>
-</dl>
-
-    
-<h2>Sessions</h2>
 
 <div class="row">
-{foreach $sessions as $session}
-<div class="col-sm-3">
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">{$session->title}</h3>
-    </div>
-    <div class="panel-body">
-        <a n:href="Record:new $athlete->id" class="btn btn-default">New record</a>
-        <a n:href="Athlete:session $athlete->id, $session->id" class="btn btn-primary">Více</a>
+    <div class="col-md-6">
+        <h2>Osobní údaje</h2>
+        <dl class="dl-horizontal">
+            <dt>Jméno:</dt>
+            <dd>{$athlete->firstname}</dd>
+            <dt>Přijímení:</dt>
+            <dd>{$athlete->surname}</dd>
+            <dt>Datum narození:</dt>
+            <dd>{$athlete->birthdate|date:'j.n.Y'}</dd>
+            <dt>Pohlaví:</dt>
+            <dd>{$athlete->sex}</dd>
+        </dl>
     </div>
 </div>
-        </div>
-{/foreach}
+        
+<div class="row">
+    <div class="col-md-6">
+        <h2>Měření</h2>
+        {control sessionGrid}
+    </div>
 </div>

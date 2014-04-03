@@ -45,3 +45,7 @@ form .error {
 html.js .jshidden {
 	display: none;
 }
+
+.grido {
+    margin:20px 0 0;
+}

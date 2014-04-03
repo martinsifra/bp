@@ -14,6 +14,9 @@ class SessionPresenter extends BasePresenter
     /** @var \App\Model\AthleteModel @inject */
     public $athletes;
     
+    /** @var \App\Model\RecordModel @inject */
+    public $records;
+
     /** @var \App\Components\Session\IRecordControlFactory @inject */
     public $recordControlFactory;
 
@@ -38,7 +41,9 @@ class SessionPresenter extends BasePresenter
     
     public function actionDetail($id)
     {
-        $this->template->records = $this->records->findBy(['session' => $id]);
+        $session = $this->loadItem($this->sessions, $id);
+        $this->template->session = $session;
+        $this['detailGrid']->session = $session;
     }
     
     

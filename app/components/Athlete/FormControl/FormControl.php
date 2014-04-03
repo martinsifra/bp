@@ -3,10 +3,10 @@
 namespace App\Components\Athlete;
 
 /**
- * Athlete record control
+ * Athlete entity from control
  * @property \App\Entities\Athlete $entity
  */
-class RecordControl extends \App\Components\Base\RecordControl
+class FormControl extends \App\Components\Base\FormControl
 {    
 
     /** @var \App\Model\RoleModel */
@@ -23,30 +23,32 @@ class RecordControl extends \App\Components\Base\RecordControl
 	 */
 	protected function createComponentForm()
 	{   
-		$form = new \BootstrapForm();
-
-        if ($this->entity) {
-            $form->addText('username', 'Username:')
-                    ->setDisabled();
-        }
+		$form = new \Nette\Application\UI\Form();
+        $form->setRenderer(new \Nextras\Forms\Rendering\Bs3FormRenderer());
         
-		$form->addText('firstname', 'Firstname:')
+		$form->addText('firstname', 'Jméno:')
 			->setRequired('Please enter your firstname.');
         
-		$form->addText('surname', 'Surname:')
+		$form->addText('surname', 'Příjmení:')
 			->setRequired('Please enter your surname.');
         
-        $form->addText('birthdate', 'Birthdate:')
+        $form->addSelect('sex', 'Pohlaví:', [
+                'male' => 'Muž',
+                'female' => 'Žena'
+            ]);
+        
+        $form->addText('birthdate', 'Datum narození:')
 			->setRequired('Please enter your date of birth.');
-
-        $form->addSelect('sex', 'Sex', ['' => '', 'male' => 'Male', 'female' => 'Female']);
         
         $form->addText('email', 'E-mail:')
 			->setRequired('Please enter your e-mail address.');
         
-		$form->addSubmit('save', 'Save');
-        
-		// Call on success
+		$form->addSubmit('save', 'Uložit');
+        $form->addButton('back', 'Zrušit')
+                ->setAttribute('class', 'cancel');
+        $form->addButton('reset')->getControlPrototype()->addAttributes(['type' => 'reset']);
+		
+        // Call on success
 		$form->onSuccess[] = $this->formSucceeded;
         
         return $form;
@@ -96,7 +98,7 @@ class RecordControl extends \App\Components\Base\RecordControl
             'username' => $this->entity->username,
             'firstname' => $this->entity->firstname,
             'surname' => $this->entity->surname,
-            'birthdate' => $this->entity->birthdate->format('Y-m-d'),
+            'birthdate' => $this->entity->birthdate->format('j.n.Y'),
             'sex' => $this->entity->sex,
             'email' => $this->entity->email
         ];

@@ -6,7 +6,7 @@ namespace App\Components\Session;
  * Athlete record control
  * @property \App\Entities\Session $entity
  */
-class RecordControl extends \App\Components\Base\RecordControl
+class RecordControl extends \App\Components\Base\FormControl
 {    
     
     public function __construct(\App\Model\SessionModel $model) {

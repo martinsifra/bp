@@ -32,8 +32,10 @@
                     <a class="navbar-brand" n:href="Dashboard:">BP</a>
                 </div>
                 <ul class="nav navbar-nav">
+                    {*
                     <li {ifCurrent Doctrine2:}class="active"{/ifCurrent}><a n:href="Doctrine2:">Doctrine 2</a></li>
                     <li {ifCurrent Grido:}class="active"{/ifCurrent}><a n:href="Grido:">Grido</a></li>
+                    *}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -70,6 +72,15 @@
 
     {* Loading scripts *}
 	{block scripts}
+<script src="{$basePath}/js/jquery.min.js"></script>
+                <script src="{$basePath}/js/bootstrap.min.js"></script>
+                <script src="{$basePath}/js/nette.ajax.js"></script>
+                <script src="{$basePath}/js/netteForms.js"></script>
+        <script src="{$basePath}/js/grido.js"></script>
+        <script src="{$basePath}/js/grido.ext.js"></script>
+        <script src="{$basePath}/js/grido.ajax.js"></script>
+
+        
         {control js}
 	{/block}
 </body>

@@ -1,6 +1,10 @@
+{block scripts}
+    {include parent}
+    {control jsGrido}
+{/block}
 
 {block content}
-<h1 class="page-header">Session's detail</h1>
+<h1 class="page-header">Měření <small>{$session->title}</small></h1>
 
-{*control detailGrid*}
+{control detailGrid}
 

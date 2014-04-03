@@ -85,4 +85,24 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     {
         return $this->webLoader->createJavaScriptLoader('grido');
     }
+    
+    
+    //// Other methods ////
+    
+    /**
+     * @param \App\Model\BaseModel $model
+     * @param int $id
+     * @return \Kdyby\Doctrine\Entities\IdentifiedEntity
+     */
+    protected function loadItem($model, $id)
+    {
+        $item = $model->find($id);
+        
+        if (!$item) {
+            $this->flashMessage("Item with id $id does not exist", 'warning');
+            $this->redirect('default');
+        }
+        return $item;
+    }
+    
 }

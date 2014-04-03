@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * 
  * @ORM\Entity
  * @ORM\Table(name="session")
+ * 
+ * @property string $title
+ * @property string $description
  */
 class Session extends \Kdyby\Doctrine\Entities\IdentifiedEntity
 {

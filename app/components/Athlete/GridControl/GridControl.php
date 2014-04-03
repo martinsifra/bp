@@ -12,66 +12,68 @@ class GridControl extends \App\Components\Base\GridControl
     {
         $grid = new \Grido\Grid($this, $name);
         
-        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
-
         //// Datasource ////
         $repository = $this->em->getRepository('\App\Entities\Athlete');
         $qb = $repository->createQueryBuilder('b');
-//                ->addSelect('a') // This will produce less SQL queries with prefetch.
-//                ->innerJoin('b.author', 'a');
+        $grid->model = new \Grido\DataSources\Doctrine($qb);
         
-        $model = new \Grido\DataSources\Doctrine($qb);//, array( // Map grido columns to the Author entity
-//            'firstname' => 'a.firstname',
-//            'surname' => 'a.surname',
-//            'birthdate' => 'a.surname'
-//        ));
-        $grid->model = $model;
+        ///// Default settings /////
+        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
+
+        $grid->setDefaultSort([
+            'surname' => 'ASC',
+        ]);
         
-        $grid->setDefaultSort(array('surname' => 'ASC'));
         
         //// Columns ////
-        $grid->addColumnText('id', 'ID');
+//        $grid->addColumnText('id', 'ID');
         
-        $grid->addColumnText('surname', 'Surname')
+        $grid->addColumnText('surname', 'Příjmení')
             ->setSortable()
             ->setFilterText()
                 ->setSuggestion();
         
-        $grid->addColumnText('firstname', 'Firstname')
-            ->setSortable();
-        
-        $grid->addColumnDate('birthdate', 'Birthdate')
-            ->setDateFormat('j.n.Y')
+        $grid->addColumnText('firstname', 'Jméno')
             ->setSortable()
-            ->setFilterDateRange();
+            ->setFilterText()
+                ->setSuggestion();
+        
+        $grid->addColumnDate('birthdate', 'Datum narození')
+            ->setDateFormat('j.n.Y')
+            ->setSortable();
+
+        
         
         //// Actions ////
-        $grid->addActionHref('detail', 'Open')
-            ->setIcon('folder-open')
-            ->setDisable(function() {
+        $grid->addActionHref('detail', 'Otevřít')
+            ->setDisable(function(){
                 return !$this->presenter->user->isAllowed('athlete', 'show');
-            });
-
-        $grid->addActionHref('edit', 'Edit')
-            ->setIcon('pencil')
-            ->setDisable(function() {
-                return !$this->presenter->user->isAllowed('athlete', 'edit');
-            });
-            
-        $grid->addActionHref('record', 'New record')
-            ->setCustomHref(function($item) {
-                return $this->presenter->link('Record:new', ['athlete_id' => $item->id]);   
             })
-            ->setIcon('asterisk')
-            ->setDisable(function() {
-                return !$this->presenter->user->isAllowed('record', 'add');
-            });
+            ->setIcon('expand');
+
+// Protože záznam náleží vždy určité session, přesuneme tlačítko až tam.
+//        $grid->addActionHref('record', 'New record')
+//            ->setCustomHref(function($item){
+//                return $this->presenter->link('Record:new', ['athlete_id' => $item->id]);   
+//            })
+//            ->setDisable(function(){
+//                return !$this->presenter->user->isAllowed('record', 'add');
+//            })
+//            ->setIcon('plus');
+
+        $grid->addActionHref('edit', 'Upravit')
+            ->setDisable(function(){
+                return !$this->presenter->user->isAllowed('athlete', 'edit');
+            })
+            ->setIcon('edit');
             
-        $grid->addActionHref('remove', 'Remove', 'remove!')
-            ->setIcon('remove')
-            ->setDisable(function () {
-                return !$this->presenter->user->isAllowed('athlete', 'remove');
-            });
+
+// Závodníci se mažou jen zřídka, tlačítko proto přesuneme až na stránku s detailem závodníka
+//        $grid->addActionHref('remove', 'Remove', 'remove!')
+//            ->setDisable(function(){
+//                return !$this->presenter->user->isAllowed('athlete', 'remove');
+//            })
+//            ->setIcon('remove');
     }
     
 }
