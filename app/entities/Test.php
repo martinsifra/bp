@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @property string $unit_in
  * @property string $unit_out
  */
-class Test extends \Kdyby\Doctrine\Entities\IdentifiedEntity
+class Test extends \App\Entities\IdentifiedEntity
 {
     /**
      * @ORM\Column(type="string", length=64, unique=true)
@@ -39,9 +39,19 @@ class Test extends \Kdyby\Doctrine\Entities\IdentifiedEntity
      * @ORM\Column(type="text", nullable=true)
      */
     protected $eval;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $source;
     
     /**
      * @ORM\Column(type="string", length=16)
      */
     protected $unit;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $decimals = 0;
 }

@@ -37,13 +37,16 @@ class SessionGridControl extends \App\Components\Base\GridControl
         ///// Columns /////
 //        $grid->addColumnText('id', 'ID');
         
-        $grid->addColumnText('title', 'Název')
-                ->setSortable();
+        $grid->addColumnDate('date', 'Datum', 'j.n.Y')
+                ->setSortable()
+                ->cellPrototype->class[] = 'center';
         
+        $grid->addColumnText('name', 'Název');
+
         
         //// Actions ////
         $grid->addActionHref('session', 'Zobrazit záznamy', 'session')
-            ->setIcon('expand')
+            ->setIcon('caret-square-o-right')
             ->setCustomHref(function($session) {
                 return $this->presenter->link('Athlete:session', [$this->athlete_id, $session->id]);
             })
@@ -54,7 +57,7 @@ class SessionGridControl extends \App\Components\Base\GridControl
         $grid->addActionHref('new_record', 'Nový záznam')
             ->setIcon('plus')
             ->setCustomHref(function($session) {
-                return $this->presenter->link('Record:new', [$session->id, $this->athlete_id]);
+                return $this->presenter->link('Record:new', ['session_id' => $session->id, 'athlete_id' => $this->athlete_id]);
             })
             ->setDisable(function(){
                 return !$this->presenter->user->isAllowed('test', 'detail');

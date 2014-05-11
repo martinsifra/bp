@@ -31,17 +31,23 @@ class GridControl extends \App\Components\Base\GridControl
 
         
         //// Columns ////
-        $grid->addColumnText('id', 'ID');
+        if ($this->settings->grid['id']) {
+            $grid->addColumnText('id', 'ID');
+        }
         
-        $grid->addColumnText('title', 'Title')
-            ->setSortable()
-            ->setFilterText()
-                ->setSuggestion();
-       
+        $grid->addColumnText('name', 'Název')
+            ->setSortable();
+
+        $grid->addColumnDate('date', 'Datum', 'j.n.Y')
+            ->setSortable();
+        
+        $grid->getColumn('date')->cellPrototype->class[] = 'center';
+        $grid->getColumn('date')->headerPrototype->class[] = 'center';
+        
         
         //// Actions ////
         $grid->addActionHref('detail', 'Open')
-            ->setIcon('folder-open')
+            ->setIcon('caret-square-o-right')
             ->setDisable(function() {
                 return !$this->presenter->user->isAllowed('session', 'show');
             });
@@ -51,6 +57,8 @@ class GridControl extends \App\Components\Base\GridControl
 //            ->setDisable(function () {
 //                return !$this->presenter->user->isAllowed('test', 'remove');
 //            });
+            
+        return $grid;
     }
     
 }

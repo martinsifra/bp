@@ -13,9 +13,14 @@ class GridControl extends Control
     /** @var \Kdyby\Doctrine\EntityManager */
     protected $em;
 
-    public function __construct(\Kdyby\Doctrine\EntityManager $em)
+    /** @var \App\Model\SettingsModel */
+    protected $settings;
+    
+    
+    public function __construct(\Kdyby\Doctrine\EntityManager $em, \App\Model\SettingsModel $settings)
     {
-        $this->em = $em; 
+        $this->em = $em;
+        $this->settings = $settings;
     }
     
     public function render()

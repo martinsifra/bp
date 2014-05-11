@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @property \App\Entities\Athlete $athlete
  * @property string $value
  */
-class Record extends \Kdyby\Doctrine\Entities\IdentifiedEntity
+class Record extends \App\Entities\IdentifiedEntity
 {
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="records")
@@ -40,4 +40,9 @@ class Record extends \Kdyby\Doctrine\Entities\IdentifiedEntity
      * @ORM\Column(type="string", length=255)
      */
     protected $value;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
 }

@@ -22,9 +22,9 @@ class BaseModel extends \Nette\Object
         return $this->dao->find($id);
     }
     
-    public function save(\Kdyby\Doctrine\Entities\IdentifiedEntity $article)
+    public function save(\App\Entities\IdentifiedEntity $entity)
     {
-        return $this->dao->save($article);
+        return $this->dao->save($entity);
     }
     
     public function findAll()
@@ -37,9 +37,19 @@ class BaseModel extends \Nette\Object
         return $this->dao->findPairs($criteria, $value, $key);
     }
     
-    public function findBy(array $criteria, mixed $orderBy = NULL, $limit = NULL, $offset = NULL)
+    public function findBy(array $criteria, $orderBy = NULL, $limit = NULL, $offset = NULL)
     {
         return $this->dao->findBy($criteria, $orderBy, $limit, $offset);
+    }
+    
+    public function findOneBy($criteria, $orderBy = NULL)
+    {
+        return $this->dao->findOneBy($criteria, $orderBy);
+    }
+    
+    public function add($entity, $relations = NULL)
+    {
+        return $this->dao->add($entity, $relations);
     }
 
 

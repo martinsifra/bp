@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 /*
  * 
  */
-class DetailGridControl extends Control
+class DetailGridControl extends \App\Components\Base\GridControl
 {
     
     /** @var \Kdyby\Doctrine\EntityManager */
@@ -24,18 +24,9 @@ class DetailGridControl extends Control
         $this->tests = $tests;
     }
     
-    public function render()
-    {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/DetailGridControl.latte');
-        $template->render();
-    }
-    
     protected function createComponentGrido()
     {
         $grid = new \Grido\Grid();
-        
-        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_INNER);
 
         //// Datasource ////
         $repository = $this->em->getRepository('\App\Entities\Record');
@@ -55,53 +46,74 @@ class DetailGridControl extends Control
             $data[$record->athlete->id]['id'] = $record->athlete->id;
             $data[$record->athlete->id]['firstname'] = $record->athlete->firstname;
             $data[$record->athlete->id]['surname'] = $record->athlete->surname;
-            $data[$record->athlete->id][$record->test->slug] = $record; 
-       }
+            $data[$record->athlete->id]['test_' . $record->test->id] = $record->value; 
+            $data[$record->athlete->id]['record_' . $record->test->id] = $record; 
+        }
         
+        $tests = $this->tests->findAll();
+        
+        foreach ($data as $athleteId => $athleteData) {
+            foreach ($tests as $test) {
+                    $testIndex = 'test_' . $test->id;
+                
+                    if (array_key_exists($testIndex, $athleteData)) {
+                        if ($test->eval) {
+                            $record = $data[$athleteId]['record_' . $test->id];
+                            $data[$athleteId][$testIndex] = eval($test->eval);
+                        } elseif ($test->source) {
+                            
+                        }
+                    } else {
+                        $data[$athleteId][$testIndex] = '';
+                    }
+            }
+        }
+       
+        ///// Grido settings /////
         $grid->model = new \Grido\DataSources\ArraySource($data);
-
-        
-//        $grid->setDefaultSort(array('id' => 'DESC'));
+        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
+        $grid->setDefaultSort(array('surname' => 'ASC'));
 
         
         //// Columns ////
 //        $grid->addColumnText('id', 'ID');
 
         $grid->addColumnText('surname', 'Příjmení')
+            ->setCustomRender(function($item) {
+                return '<a href="' . $this->presenter->link('Athlete:detail', $item['id'] ) . '">'.$item['surname'].'</a>';
+            })
             ->setSortable()
             ->setFilterText()
                 ->setSuggestion();
-        
-        $grid->addColumnText('firstname', 'Jméno');
+            
+        $grid->getColumn('surname')->getCellPrototype()->setName('th');
+                
+                
+        $grid->addColumnText('firstname', 'Jméno')
+            ->setCustomRender(function($item) {
+                return $item['firstname'];
+            })
+            ->getCellPrototype()
+                ->setName('th');
+
+
             
         ///// Test columns /////
-        foreach ($this->tests->findAll() as $test) {
-            $grid->addColumnText($test->slug, $test->name)
-                ->setCustomRender(function($item) use ($test){
-                    if (array_key_exists($test->slug, $item)) {
-                        return $item[$test->slug]->value . '&nbsp;' . $item[$test->slug]->test->unit;
-                    }
-                    return '';
-                });            
+        foreach ($tests as $test) {
+            $grid->addColumnNumber('test_' . $test->id, $test->name . ' ' . ($test->unit ? '<small>[' . $test->unit . ']</small>' : ''), $test->decimals)
+                    ->setCustomRender(__DIR__ . "\dropdown.latte", ['test' => $test, 'session' => $this->session])
+                    ->setSortable();
+                
+            $grid->getColumn('test_' . $test->id)->cellPrototype->class[] = 'center';
+            $grid->getColumn('test_' . $test->id)->headerPrototype->class[] = 'center';
         }
 
-//        
-//        $grid->addColumnText('vyska', 'Výška');
-//        $grid->addColumnText('vydrzVeShybu', 'Výdrž ve shybu');
-//        
-//        $grid->addColumnText('surname', 'Surname')
-//            ->setSortable()
-//            ->setFilterText()
-//                ->setSuggestion();
-//        
-
-       
         
         //// Actions ////
-//        $grid->addActionHref('detail', 'Open')
-//            ->setIcon('folder-open')
+//        $grid->addActionHref('athlete', '')
+//            ->setIcon('user')
 //            ->setDisable(function() {
-//                return !$this->presenter->user->isAllowed('session', 'show');
+//                return !$this->presenter->user->isAllowed('athlete', 'show');
 //            });
             
 //        $grid->addActionHref('remove', 'Remove', 'remove!')
@@ -113,9 +125,8 @@ class DetailGridControl extends Control
         return $grid;
     }
     
-    public function setSession(\Kdyby\Doctrine\Entities\IdentifiedEntity $session)
+    public function setSession(\App\Entities\IdentifiedEntity $session)
     {
         $this->session = $session;
     }
-    
 }

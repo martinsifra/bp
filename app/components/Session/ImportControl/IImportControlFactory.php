@@ -2,8 +2,8 @@
 
 namespace App\Components\Session;
 
-interface IRecordControlFactory
+interface IImportControlFactory
 {
-    /** @return RecordControl */
+    /** @return ImportControl */
     function create();
 }

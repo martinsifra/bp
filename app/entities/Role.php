@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="role")
  */
-class Role extends \Kdyby\Doctrine\Entities\IdentifiedEntity
+class Role extends \App\Entities\IdentifiedEntity
 {
     
     /**

@@ -40,6 +40,7 @@ webloader:
 #                - bootstrap.min.js
 #                - nette.ajax.js
 #                - netteForms.js
+                - chart.min.js
                 - main.js
                 - bootstrap-datetimepicker.min.js
                 

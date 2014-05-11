@@ -15,16 +15,16 @@ use Doctrine\ORM\Mapping as ORM;
  * @property string $firstname
  * @property string $surname
  */
-class User extends \Kdyby\Doctrine\Entities\IdentifiedEntity
+class User extends \App\Entities\IdentifiedEntity
 {
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
      */
     protected $username;
 
     /**
-     * @ORM\Column(type="string", length=128)
+     * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $password;
     
@@ -39,7 +39,7 @@ class User extends \Kdyby\Doctrine\Entities\IdentifiedEntity
     protected $surname;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $email;
 

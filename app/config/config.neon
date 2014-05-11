@@ -9,6 +9,8 @@ includes:
 
 
 parameters:
+    grid:
+        id: false
 
 
 php:
@@ -40,7 +42,6 @@ extensions:
     doctrine: Kdyby\Doctrine\DI\OrmExtension
     events: Kdyby\Events\DI\EventsExtension
 
-
 services:
     # Authenticator
     - App\Authenticator(@doctrine.dao(App\Entities\User))
@@ -65,17 +66,22 @@ services:
     # Components' factories
     # Athletes' components
     - App\Components\Athlete\IGridControlFactory
-    - App\Components\Athlete\IFormControlFactory
+    - App\Components\Athlete\IEntityControlFactory
     - App\Components\Athlete\IRecordGridControlFactory
     - App\Components\Athlete\ISessionGridControlFactory
+    - App\Components\Athlete\ITestGridControlFactory
 
     # Records' components
-    - App\Components\Record\IRecordControlFactory
+    - App\Components\Record\IEntityControlFactory
 
     # Session' components
     - App\Components\Session\IDetailGridControlFactory
     - App\Components\Session\IGridControlFactory
-    - App\Components\Session\IRecordControlFactory
+    - App\Components\Session\IEntityControlFactory
+    - App\Components\Session\IImportControlFactory
+
+    # Settings
+    - App\Model\SettingsModel(%grid%)
 
     # Sign components
     - App\Components\ISignInControlFactory
@@ -85,7 +91,8 @@ services:
 
     # Test' components
     - App\Components\Test\IGridControlFactory
-    - App\Components\Test\IRecordControlFactory
+    - App\Components\Test\IEntityControlFactory
+    - App\Components\Test\IInterpreterFactory
 
     # User' components
     - App\Components\User\IGridControlFactory
@@ -105,7 +112,7 @@ services:
             - addResource('homepage')
             - addResource('record')
             - addResource('session')
-            - addResource('test')            
+            - addResource('test')
             - addResource('user')
 
             # Privilegia

@@ -6,8 +6,9 @@ namespace App\Components\Athlete;
  * Athlete entity from control
  * @property \App\Entities\Athlete $entity
  */
-class FormControl extends \App\Components\Base\FormControl
+class EntityControl extends \App\Components\Base\EntityControl
 {    
+    const REDIRECT = 'Athlete:';
 
     /** @var \App\Model\RoleModel */
     private $roles;
@@ -72,27 +73,14 @@ class FormControl extends \App\Components\Base\FormControl
         }
 
         // 3) Map data from form to entity
-        //$this->entity->username = $values->username; // TODO: Check if username is unique! -> Integration violation - in form of course!        
-        $this->entity->password = "$2y$10$6y7exPNgXqn/T6nvBeYOz.pnDYHj6Q.xy6h1EheJvUW2lbXBEyx8O"; // 'heslo';
-        $this->entity->firstname = $values->firstname;
-        $this->entity->surname = $values->surname;
-        $this->entity->birthdate = \Nette\DateTime::from($values->birthdate);
-        $this->entity->sex = $values->sex;
-        $this->entity->email = $values->email;
+        $this->toEntity($values);
         
         // 4) Persist and flush entity -> redirect to dafeult
-        $this->model->save($this->entity);
-        $this->presenter->flashMessage($message, 'success');
-        $this->presenter->redirect('default');
+        $this->save([], 'Athlete:');
 	}
+
     
-    public function setEntity(\App\Entities\Athlete $entity)
-    {
-        $this->entity = $entity;
-        $this['form']->setDefaults($this->loadDefaults());
-    }
-    
-    private function loadDefaults()
+    protected function toArray()
     {
         return [
             'username' => $this->entity->username,
@@ -102,5 +90,16 @@ class FormControl extends \App\Components\Base\FormControl
             'sex' => $this->entity->sex,
             'email' => $this->entity->email
         ];
+    }
+    
+    
+    protected function toEntity($values)
+    {
+        $this->entity->password = "$2y$10$6y7exPNgXqn/T6nvBeYOz.pnDYHj6Q.xy6h1EheJvUW2lbXBEyx8O"; // 'heslo';
+        $this->entity->firstname = $values->firstname;
+        $this->entity->surname = $values->surname;
+        $this->entity->birthdate = \Nette\DateTime::from($values->birthdate);
+        $this->entity->sex = $values->sex;
+        $this->entity->email = $values->email;
     }
 }

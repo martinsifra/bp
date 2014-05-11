@@ -4,11 +4,12 @@
 
 <div class="btn-toolbar" role="toolbar">
     <a n:href="Athlete:detail $athlete->id" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
+    <a n:href="Record:new $athlete->id, $session->id" type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Nový záznam</a>
 </div>
 
 <div class="row">
     <div class="col-md-6">
-        <h2>{$session->title}</h2>
+        <h2>{$session->name}</h2>
         {control recordGrid}
     </div>
 </div>

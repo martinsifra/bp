@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @property string $title
  * @property string $description
  */
-class Session extends \Kdyby\Doctrine\Entities\IdentifiedEntity
+class Session extends \App\Entities\IdentifiedEntity
 {
     /**
      * @ORM\OneToMany(targetEntity="Record", mappedBy="session")
@@ -24,12 +24,17 @@ class Session extends \Kdyby\Doctrine\Entities\IdentifiedEntity
     /**
      * @ORM\Column(type="string", length=128)
      */
-    protected $title;
+    protected $name;
     
     /**
      * @ORM\Column(type="string", length=1024)
      */
     protected $description;
+    
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    protected $date;
 
 
 

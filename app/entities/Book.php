@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="book")
  */
-class Book extends \Kdyby\Doctrine\Entities\IdentifiedEntity
+class Book extends \App\Entities\IdentifiedEntity
 {
 
     /**

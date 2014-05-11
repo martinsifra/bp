@@ -4,7 +4,13 @@
 {/block}
 
 {block content}
-<h1 class="page-header">Měření <small>{$session->title}</small></h1>
+<h1 class="page-header">Měření <small>{$session->name}</small></h1>
+
+<div class="btn-toolbar" role="toolbar">
+    <a n:href="Session:" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
+    <a n:href="Record:new 'session_id' => $session->id" type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Nový záznam</a>
+    <a n:href="import $session->id" type="button" class="btn btn-default"><i class="fa fa-cloud-upload"></i> Import</a>
+</div>
 
 {control detailGrid}
 

@@ -1,20 +1,15 @@
 <?php
 
-Namespace App\Components\Test;
-
-//use Nette\Security as NS,
-//    Nette, Model,
-//    Nette\Forms\Form,
-//	Nette\Forms\Controls;
-
+namespace App\Components\Session;
 
 /**
- * @property \App\Entities\Test $entity
+ * Athlete record control
+ * @property \App\Entities\Session $entity
  */
-class RecordControl extends \App\Components\Base\FormControl
+class EntityControl extends \App\Components\Base\EntityControl
 {    
     
-    public function __construct(\App\Model\TestModel $model) {
+    public function __construct(\App\Model\SessionModel $model) {
         $this->model = $model;
     }
 
@@ -27,16 +22,13 @@ class RecordControl extends \App\Components\Base\FormControl
 		$form = new \Nette\Application\UI\Form();
         $form->setRenderer(new \Nextras\Forms\Rendering\Bs3FormRenderer());
         
-        $form->addText('slug', 'Slug');
+		$form->addText('name', 'Název:')
+			->setRequired('Zadejte prosím název měření.');
         
-		$form->addText('name', 'Name:')
-			->setRequired('Please enter test\'s name.');
+		$form->addTextArea('desc', 'Popis:');
         
-		$form->addTextArea('desc', 'Description:');
-
-		$form->addTextArea('eval', 'Eval:');
-        
-		$form->addText('unit', 'Unit:');
+        $form->addText('date', 'Datum:')
+			->setRequired('Zadejte prosím datum konání měření.');
         
 		$form->addSubmit('save', 'Save');
         
@@ -53,40 +45,38 @@ class RecordControl extends \App\Components\Base\FormControl
         
         // 2) Recognize add or edit of record
         if (!$this->entity) {
-            $this->entity = new \App\Entities\Test();
-
+            $this->entity = new \App\Entities\Session();
+            
             $message = 'New record was successfuly saved!';
         } else {
             $message = 'Changes was successfuly saved!';
         }
 
+
         // 3) Map data from form to entity
-        $this->entity->slug = $values->slug;
-        $this->entity->name = $values->name;
-        $this->entity->description = $values->desc;
-        $this->entity->eval = $values->eval;
-        $this->entity->unit = $values->unit;       
+        $this->toEntity($values);
         
         // 4) Persist and flush entity -> redirect to dafeult
         $this->model->save($this->entity);
         $this->presenter->flashMessage($message, 'success');
         $this->presenter->redirect('default');
 	}
+
     
-    public function setEntity(\Kdyby\Doctrine\Entities\BaseEntity $entity)
-    {
-        $this->entity = $entity;
-        $this['form']->setDefaults($this->loadDefaults());
-    }
-    
-    private function loadDefaults()
+    protected function toArray()
     {
         return [
-            'slug' => $this->entity->slug,
             'name' => $this->entity->name,
             'desc' => $this->entity->description,
-            'eval' => $this->entity->eval,
-            'unit' => $this->entity->unit
+            'date' => $this->entity->date->format('j.n.Y')
         ];
+    }
+    
+    
+    protected function toEntity($values)
+    {
+        $this->entity->name = $values->name;
+        $this->entity->description = $values->desc;
+        $this->entity->date = \Nette\DateTime::from($values->date);
     }
 }

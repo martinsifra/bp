@@ -55,6 +55,8 @@ class GridControl extends \App\Components\Base\GridControl
             ->setDisable(function () {
                 return !$this->presenter->user->isAllowed('test', 'remove');
             });
+            
+        return $grid;
     }
     
 }

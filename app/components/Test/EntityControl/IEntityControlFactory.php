@@ -2,8 +2,8 @@
 
 namespace App\Components\Test;
 
-interface IRecordControlFactory
+interface IEntityControlFactory
 {
-    /** @return RecordControl */
+    /** @return EntityControl */
     function create();
 }

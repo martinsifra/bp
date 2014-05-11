@@ -7,11 +7,24 @@ namespace App\Presenters;
  */
 class RecordPresenter extends BasePresenter
 {
+    
+    /** @persistent */
+    public $backlink = '';
+    
     /** @var \App\Model\RecordModel @inject */
     public $records;  // Slouzi k overeni recordu pri editaci, ci mazani. Jine modely si musi resit komponenty.
     
-    /** @var \App\Components\Record\IRecordControlFactory @inject */
-    public $recordControlFactory;
+    /** @var \App\Model\AthleteModel @inject */
+    public $athletes;
+
+    /** @var \App\Model\SessionModel @inject */
+    public $sessions;
+
+    /** @var \App\Model\TestModel @inject */
+    public $tests;
+    
+    /** @var \App\Components\Record\IEntityControlFactory @inject */
+    public $entityControlFactory;
     
     /**
      * @secured
@@ -20,7 +33,20 @@ class RecordPresenter extends BasePresenter
      */
     public function actionNew($athlete_id, $session_id, $test_id)
     {
-
+        if ($athlete_id) {
+            $athlete = $this->loadItem($this->athletes, $athlete_id);
+        }
+        
+        if ($session_id) {
+            $session = $this->loadItem($this->sessions, $session_id);
+        }
+        
+        if ($test_id) {
+            $test = $this->loadItem($this->tests, $test_id);
+        }
+        
+        $this['entity']->setParams($athlete_id, $session_id, $test_id);
+        
     }
     
     /**
@@ -32,15 +58,27 @@ class RecordPresenter extends BasePresenter
     {
         $record = $this->loadItem($this->records, $id);
         $this->template->record = $record;
-        $this['record']->entity = $record;
+        $this['entity']->entity = $record;
     }
+    
+    
+    /**
+     * @secured
+     * @resource('record')
+     * @privilege('remove')
+     */
+    public function actionRemove($id)
+    {
+        
+    }
+    
     
     ///// Components /////
 
-    /** @return \App\Components\Record\RecordControl */
-    protected function createComponentRecord()
+    /** @return \App\Components\Record\EntityControl */
+    protected function createComponentEntity()
     {
-        return $this->recordControlFactory->create();
+        return $this->entityControlFactory->create();
     }
     
     

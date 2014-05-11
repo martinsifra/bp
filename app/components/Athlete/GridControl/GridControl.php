@@ -49,7 +49,7 @@ class GridControl extends \App\Components\Base\GridControl
             ->setDisable(function(){
                 return !$this->presenter->user->isAllowed('athlete', 'show');
             })
-            ->setIcon('expand');
+            ->setIcon('caret-square-o-right');
 
 // Protože záznam náleží vždy určité session, přesuneme tlačítko až tam.
 //        $grid->addActionHref('record', 'New record')
@@ -74,6 +74,8 @@ class GridControl extends \App\Components\Base\GridControl
 //                return !$this->presenter->user->isAllowed('athlete', 'remove');
 //            })
 //            ->setIcon('remove');
+            
+        return $grid;
     }
     
 }

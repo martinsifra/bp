@@ -1,0 +1,15 @@
+
+{if $item['test_' . $test->id]}
+{$item['test_' . $test->id]}
+<div class="dropdown pull-right">
+    <a data-toggle="dropdown" class="btn btn-link btn-xs" href="#"><i class="fa fa-ellipsis-v fa-fw"></i></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" style="text-align:left;">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{plink Record:detail $item['record_'.$test->id]->id}"><i class="fa fa-edit fa-fw"></i> Upravit</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{plink Athlete:test $item['id'], $test->id}"><i class="fa fa-bar-chart-o fa-fw"></i> Statistika</a></li>
+        <li role="presentation" class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{plink Record:remove $item['record_'.$test->id]->id}"><i class="fa fa-trash-o fa-fw"></i> Odebrat</a></li>
+    </ul>
+</div>
+{else}
+<a class="pull-right" href="{plink 'Record:new' $item['id'], $session->id, $test->id, 'backlink' => $presenter->storeRequest()}"><i class="fa fa-plus-square fa-fw"></i></a>
+{/if}

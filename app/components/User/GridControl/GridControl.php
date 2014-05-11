@@ -73,5 +73,7 @@ class GridControl extends \App\Components\Base\GridControl
             ->setDisable(function () {
                 return !$this->presenter->user->isAllowed('athlete', 'remove');
             });
+            
+        return $grid;
     }
 }

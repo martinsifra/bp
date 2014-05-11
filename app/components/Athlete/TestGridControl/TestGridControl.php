@@ -5,14 +5,14 @@ namespace App\Components\Athlete;
 /**
  * 
  */
-class RecordGridControl extends \App\Components\Base\GridControl
+class TestGridControl extends \App\Components\Base\GridControl
 {
     
     /** @var int $athlete_id */
     private $athlete_id;
     
-    /** @var int $session_id */
-    private $session_id;
+    /** @var int $test_id */
+    private $test_id;
 
 
     protected function createComponentGrido($name)
@@ -24,10 +24,10 @@ class RecordGridControl extends \App\Components\Base\GridControl
         $qb = $repository->createQueryBuilder('r')
                 ->addSelect('t') // This will produce less SQL queries with prefetch.
                 ->innerJoin('r.test', 't')
-                ->where('r.athlete = :athlete AND r.session = :session')
+                ->where('r.athlete = :athlete AND r.test = :test')
                 ->setParameters([
                     'athlete' => $this->athlete_id,
-                    'session' => $this->session_id
+                    'test' => $this->test_id
                 ]);
         $grid->model = new \Grido\DataSources\Doctrine($qb, [
             'test_name' => 't.name'
@@ -35,19 +35,16 @@ class RecordGridControl extends \App\Components\Base\GridControl
 
         
         ///// Grid settings /////
-        $grid->setDefaultSort(array('test_name' => 'ASC'));
+        $grid->setDefaultSort(array('created' => 'ASC'));
         $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_INNER);
         
         //// Columns ////
 //        $grid->addColumnText('id', 'ID');
         
-        $grid->addColumnText('test_name', 'Test')
-                ->setCustomRender(function($record){
-                    return $record->test->name;
-                })
+        $grid->addColumnDate('created', 'Datum měření', 'j.n.Y')
                 ->setSortable();
         
-        $grid->addColumnText('value', 'Value')
+        $grid->addColumnText('value', 'Hodnota')
                 ->setCustomRender(function($record){
                     if ($record->test->eval) {
                         return eval($record->test->eval) . '&nbsp;' . $record->test->unit;
@@ -58,31 +55,31 @@ class RecordGridControl extends \App\Components\Base\GridControl
         
         
         ///// Actions /////
-        $grid->addActionHref('test', '')
-            ->setCustomHref(function($record) {
-                return $this->presenter->link('Athlete:test', [$this->athlete_id, $record->test->id]);
-            })
-            ->setIcon('bar-chart-o');
-                
-        $grid->addActionHref('detail', 'Upravit', 'Record:detail')
-            ->setIcon('edit')
-            ->setDisable(function() {
-                return !$this->presenter->user->isAllowed('test', 'detail');
-            });
-            
-        $grid->addActionHref('remove', 'Odstranit', 'remove!')
-            ->setIcon('trash-o')
-            ->setDisable(function () {
-                return !$this->presenter->user->isAllowed('athlete', 'remove');
-            });
+//        $grid->addActionHref('test', '')
+//            ->setCustomHref(function($record) {
+//                return $this->presenter->link('Athlete:test', [$this->athlete_id, $record->test->id]);
+//            })
+//            ->setIcon('stats');
+//                
+//        $grid->addActionHref('detail', 'Upravit', 'Record:detail')
+//            ->setIcon('edit')
+//            ->setDisable(function() {
+//                return !$this->presenter->user->isAllowed('test', 'detail');
+//            });
+//            
+//        $grid->addActionHref('remove', 'Odstranit', 'remove!')
+//            ->setIcon('trash')
+//            ->setDisable(function () {
+//                return !$this->presenter->user->isAllowed('athlete', 'remove');
+//            });
 
         return $grid;
     }
     
-    public function setParams($athlete_id, $session_id)
+    public function setParams($athlete_id, $test_id)
     {
         $this->athlete_id = $athlete_id;
-        $this->session_id = $session_id;
+        $this->test_id = $test_id;
     }
     
 }

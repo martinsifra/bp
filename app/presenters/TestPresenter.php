@@ -11,8 +11,8 @@ class TestPresenter extends BasePresenter
     /** @var \App\Model\TestModel @inject */
     public $tests;
     
-    /** @var \App\Components\Test\IRecordControlFactory @inject */
-    public $recordControlFactory;
+    /** @var \App\Components\Test\IEntityControlFactory @inject */
+    public $entityControlFactory;
 
     /** @var \App\Components\Test\IGridControlFactory @inject */
     public $gridControlFactory;
@@ -49,16 +49,16 @@ class TestPresenter extends BasePresenter
     {
         $test = $this->loadItem($this->tests, $id);
         $this->template->test = $test;
-        $this['record']->entity = $test;
+        $this['entity']->entity = $test;
     }
     
     
     ///// Components /////
 
-    /** @return \App\Components\Test\RecordControl */
-    protected function createComponentRecord()
+    /** @return \App\Components\Test\EntityControl*/
+    protected function createComponentEntity()
     {
-        return $this->recordControlFactory->create();
+        return $this->entityControlFactory->create();
     }    
     
     /** @return \App\Components\Test\GridControl */

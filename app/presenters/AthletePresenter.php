@@ -16,9 +16,12 @@ class AthletePresenter extends BasePresenter
 
     /** @var \App\Model\RecordModel @inject */
     public $records;
+
+    /** @var \App\Model\testModel @inject */
+    public $tests;
     
-    /** @var \App\Components\Athlete\IFormControlFactory @inject */
-    public $formControlFactory;
+    /** @var \App\Components\Athlete\IEntityControlFactory @inject */
+    public $entityControlFactory;
 
     /** @var \App\Components\Athlete\IGridControlFactory @inject */
     public $gridControlFactory;
@@ -28,6 +31,9 @@ class AthletePresenter extends BasePresenter
     
     /** @var \App\Components\Athlete\ISessionGridControlFactory @inject */
     public $sessionGridControlFactory;
+    
+    /** @var \App\Components\Athlete\ITestGridControlFactory @inject */
+    public $testGridControlFactory;
     
     
     ///// Actions /////
@@ -51,7 +57,7 @@ class AthletePresenter extends BasePresenter
     {
         $athlete = $this->loadItem($this->athletes, $id);
         $this->template->athlete = $athlete;
-        $this['form']->entity = $athlete;
+        $this['entity']->entity = $athlete;
 
         $this['sessionGrid']->setParams($id);
     }
@@ -65,7 +71,7 @@ class AthletePresenter extends BasePresenter
     {
         $athlete = $this->loadItem($this->athletes, $id);
         $this->template->athlete = $athlete;
-        $this['form']->entity = $athlete;
+        $this['entity']->entity = $athlete;
     }
     
     /**
@@ -84,6 +90,36 @@ class AthletePresenter extends BasePresenter
             'athlete' => $id,
             'session' => $session_id,
         ]);
+    }
+    
+    public function actionTest($id, $test_id)
+    {
+        $this->template->athlete = $this->loadItem($this->athletes, $id);
+        $this->template->test = $this->loadItem($this->tests, $test_id);
+        
+        $this['testGrid']->setParams($id, $test_id);
+        
+        $records = $this->records->findBy([
+                'athlete' => $id,
+                'test' => $test_id
+            ],
+            [
+                'created' => 'ASC'
+            ]);
+        
+        $labels = [];
+        $data = [];
+        
+        foreach ($records as $record) {
+            $labels[] = [
+                'name' => $record->session->name,
+                'created' => $record->created
+            ];
+            $data[] = $record->value;
+        }
+        
+        $this->template->labels = $labels;
+        $this->template->data = $data;
     }
     
     /**
@@ -109,10 +145,10 @@ class AthletePresenter extends BasePresenter
     
     ///// Components /////
 
-    /** @return \App\Components\Athlete\FormControl */
-    protected function createComponentForm()
+    /** @return \App\Components\Athlete\EntityControl */
+    protected function createComponentEntity()
     {
-        return $this->formControlFactory->create();
+        return $this->entityControlFactory->create();
     }    
     
     /** @return \App\Components\Athlete\GridControl */
@@ -133,6 +169,11 @@ class AthletePresenter extends BasePresenter
         return $this->sessionGridControlFactory->create();
     }
     
+    /** @return \App\Components\Athlete\TestGridControl */
+    protected function createComponentTestGrid()
+    {
+        return $this->testGridControlFactory->create();
+    }
     
     //// Other methods ////
     

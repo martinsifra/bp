@@ -2,8 +2,8 @@
 
 namespace App\Components\Athlete;
 
-interface IFormControlFactory
+interface ITestGridControlFactory
 {
-    /** @return FormControl */
+    /** @return TestGridControl */
     function create();
 }
