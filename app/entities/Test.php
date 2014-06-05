@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @property string $name
  * @property string $description
  * @property string $eval PHP code to execute
+ * @property string $source M code to execute
  * @property string $unit_in
  * @property string $unit_out
  */

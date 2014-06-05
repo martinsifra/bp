@@ -8,14 +8,20 @@ namespace App\Components\Athlete;
 class GridControl extends \App\Components\Base\GridControl
 {
     
-    protected function createComponentGrido($name)
+    protected function createComponentGrido()
     {
-        $grid = new \Grido\Grid($this, $name);
+        $grid = new \Grido\Grid();
         
         //// Datasource ////
-        $repository = $this->em->getRepository('\App\Entities\Athlete');
-        $qb = $repository->createQueryBuilder('b');
-        $grid->model = new \Grido\DataSources\Doctrine($qb);
+        $repository = $this->em->getRepository('App\Entities\Athlete');
+        $qb = $repository->createQueryBuilder('a')
+                ->addSelect('u')
+                ->join('a.user', 'u');
+        
+        $grid->model = new \Grido\DataSources\Doctrine($qb,[
+            'surname' => 'u.surname',
+            'firstname' => 'u.firstname'
+        ]);
         
         ///// Default settings /////
         $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
@@ -29,6 +35,7 @@ class GridControl extends \App\Components\Base\GridControl
 //        $grid->addColumnText('id', 'ID');
         
         $grid->addColumnText('surname', 'Příjmení')
+            ->setCustomRender(__DIR__ . '\surname.latte')
             ->setSortable()
             ->setFilterText()
                 ->setSuggestion();
@@ -42,6 +49,8 @@ class GridControl extends \App\Components\Base\GridControl
             ->setDateFormat('j.n.Y')
             ->setSortable();
 
+        $grid->getColumn('birthdate')->cellPrototype->class[] = 'center';
+        $grid->getColumn('birthdate')->headerPrototype->class[] = 'center';
         
         
         //// Actions ////
@@ -51,31 +60,13 @@ class GridControl extends \App\Components\Base\GridControl
             })
             ->setIcon('caret-square-o-right');
 
-// Protože záznam náleží vždy určité session, přesuneme tlačítko až tam.
-//        $grid->addActionHref('record', 'New record')
-//            ->setCustomHref(function($item){
-//                return $this->presenter->link('Record:new', ['athlete_id' => $item->id]);   
-//            })
-//            ->setDisable(function(){
-//                return !$this->presenter->user->isAllowed('record', 'add');
-//            })
-//            ->setIcon('plus');
-
         $grid->addActionHref('edit', 'Upravit')
             ->setDisable(function(){
                 return !$this->presenter->user->isAllowed('athlete', 'edit');
             })
             ->setIcon('edit');
-            
 
-// Závodníci se mažou jen zřídka, tlačítko proto přesuneme až na stránku s detailem závodníka
-//        $grid->addActionHref('remove', 'Remove', 'remove!')
-//            ->setDisable(function(){
-//                return !$this->presenter->user->isAllowed('athlete', 'remove');
-//            })
-//            ->setIcon('remove');
             
         return $grid;
-    }
-    
+    }    
 }

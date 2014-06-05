@@ -7,31 +7,28 @@ namespace App\Components\Athlete;
  */
 class TestGridControl extends \App\Components\Base\GridControl
 {
+
+    private $records;
     
-    /** @var int $athlete_id */
-    private $athlete_id;
-    
-    /** @var int $test_id */
-    private $test_id;
+    private $results;
 
 
-    protected function createComponentGrido($name)
+    protected function createComponentGrido()
     {
-        $grid = new \Grido\Grid();
+        $data = [];
         
-        //// Datasource ////
-        $repository = $this->em->getRepository('\App\Entities\Record');
-        $qb = $repository->createQueryBuilder('r')
-                ->addSelect('t') // This will produce less SQL queries with prefetch.
-                ->innerJoin('r.test', 't')
-                ->where('r.athlete = :athlete AND r.test = :test')
-                ->setParameters([
-                    'athlete' => $this->athlete_id,
-                    'test' => $this->test_id
-                ]);
-        $grid->model = new \Grido\DataSources\Doctrine($qb, [
-            'test_name' => 't.name'
-        ]);
+        foreach ($this->records as $record) {
+            $data[$record->id] = [
+                'created' => $record->created ? $record->created->format('j.n.Y') : '',
+                'value' => $this->results[$record->id][$record->test->slug]['value']
+            ];
+        }
+        
+        
+        
+        $grid = new \Grido\Grid();
+        $grid->model = new \Grido\DataSources\ArraySource($data);
+        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
 
         
         ///// Grid settings /////
@@ -44,42 +41,15 @@ class TestGridControl extends \App\Components\Base\GridControl
         $grid->addColumnDate('created', 'Datum měření', 'j.n.Y')
                 ->setSortable();
         
-        $grid->addColumnText('value', 'Hodnota')
-                ->setCustomRender(function($record){
-                    if ($record->test->eval) {
-                        return eval($record->test->eval) . '&nbsp;' . $record->test->unit;
-                    } else {
-                        return $record->value . '&nbsp;' . $record->test->unit;
-                    }
-                });
-        
-        
-        ///// Actions /////
-//        $grid->addActionHref('test', '')
-//            ->setCustomHref(function($record) {
-//                return $this->presenter->link('Athlete:test', [$this->athlete_id, $record->test->id]);
-//            })
-//            ->setIcon('stats');
-//                
-//        $grid->addActionHref('detail', 'Upravit', 'Record:detail')
-//            ->setIcon('edit')
-//            ->setDisable(function() {
-//                return !$this->presenter->user->isAllowed('test', 'detail');
-//            });
-//            
-//        $grid->addActionHref('remove', 'Odstranit', 'remove!')
-//            ->setIcon('trash')
-//            ->setDisable(function () {
-//                return !$this->presenter->user->isAllowed('athlete', 'remove');
-//            });
+        $grid->addColumnText('value', 'Hodnota');
 
         return $grid;
     }
     
-    public function setParams($athlete_id, $test_id)
+    public function setParams($results, $records)
     {
-        $this->athlete_id = $athlete_id;
-        $this->test_id = $test_id;
+        $this->records = $records;
+        $this->results = $results;
     }
     
 }

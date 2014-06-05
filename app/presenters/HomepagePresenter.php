@@ -30,6 +30,20 @@ class HomepagePresenter extends BasePresenter
      */
     public function renderDefault($id)
 	{
+        
+
+        \Nette\Diagnostics\Debugger::$maxDepth = 7;
+        $result = $this->entityManager->createQuery("SELECT u FROM App\Entities\User u WHERE :id MEMBER OF u.roles")->setParameter('id', 3)->getResult();
+        dump($result);
+//        dump($user);
+//        $coach = new \App\Entities\Coach();
+//        $coach->user = $user;
+//        $coach->sex = 'male';
+//        $this->entityManager->persist($coach);
+//        
+//        $this->entityManager->flush();        
+//        
+//        dump($this->entityManager->getRepository('App\Entities\Coach')->findAll());
 //        $books = $this->entityManager->getDao(\App\Entities\Book::getClassName());
 //
 //        $athlete = new \App\Entities\Athlete();

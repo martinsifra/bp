@@ -7,9 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
- * @ORM\InheritanceType("JOINED")
- * @ORM\DiscriminatorColumn(name="child_entity", type="string")
- * @ORM\DiscriminatorMap({"user" = "User", "athlete" = "Athlete"})
  * 
  * @property string $username
  * @property string $firstname
@@ -44,10 +41,25 @@ class User extends \App\Entities\IdentifiedEntity
     protected $email;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $phone;
+    
+    /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
      **/
     protected $roles;
-
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Athlete", inversedBy="user", fetch="LAZY", cascade={"all"})
+     **/
+    protected $athlete;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Coach", inversedBy="user", fetch="LAZY")
+     **/
+    protected $coach;
+    
     
     public function __construct()
     {

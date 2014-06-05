@@ -12,20 +12,12 @@ class GridControl extends \App\Components\Base\GridControl
     {
         $grid = new \Grido\Grid($this, $name);
         
-        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_OUTER);
+        $grid->setFilterRenderType(\Grido\Components\Filters\Filter::RENDER_INNER);
 
         //// Datasource ////
         $repository = $this->em->getRepository('\App\Entities\Session');
         $qb = $repository->createQueryBuilder('b');
-//                ->addSelect('a') // This will produce less SQL queries with prefetch.
-//                ->innerJoin('b.author', 'a');
-        
-        $model = new \Grido\DataSources\Doctrine($qb);//, array( // Map grido columns to the Author entity
-//            'firstname' => 'a.firstname',
-//            'surname' => 'a.surname',
-//            'birthdate' => 'a.surname'
-//        ));
-        $grid->model = $model;
+        $grid->model = new \Grido\DataSources\Doctrine($qb);
         
         $grid->setDefaultSort(array('id' => 'DESC'));
 
@@ -35,10 +27,10 @@ class GridControl extends \App\Components\Base\GridControl
             $grid->addColumnText('id', 'ID');
         }
         
-        $grid->addColumnText('name', 'Název')
-            ->setSortable();
-
         $grid->addColumnDate('date', 'Datum', 'j.n.Y')
+            ->setSortable();
+        
+        $grid->addColumnText('name', 'Název')
             ->setSortable();
         
         $grid->getColumn('date')->cellPrototype->class[] = 'center';
@@ -51,12 +43,6 @@ class GridControl extends \App\Components\Base\GridControl
             ->setDisable(function() {
                 return !$this->presenter->user->isAllowed('session', 'show');
             });
-            
-//        $grid->addActionHref('remove', 'Remove', 'remove!')
-//            ->setIcon('remove')
-//            ->setDisable(function () {
-//                return !$this->presenter->user->isAllowed('test', 'remove');
-//            });
             
         return $grid;
     }

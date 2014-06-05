@@ -52,6 +52,16 @@ class TestPresenter extends BasePresenter
         $this['entity']->entity = $test;
     }
     
+    /**
+     * @secured
+     * @resource('test')
+     * @privilege('delete')
+     */
+    public function actionDelete($id)
+    {
+        $test = $this->loadItem($this->tests, $id);
+    }
+    
     
     ///// Components /////
 

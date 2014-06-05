@@ -2,9 +2,7 @@
 
 namespace App\Presenters;
 
-use Nette\Application\UI,
-    Nette\Utils\Tokenizer,
-    Nette\Utils\TokenIterator;
+use Nette\Application\UI;
 
 class ParserPresenter extends BasePresenter
 {

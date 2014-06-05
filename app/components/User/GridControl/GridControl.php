@@ -16,64 +16,70 @@ class GridControl extends \App\Components\Base\GridControl
 
         //// Datasource ////
         $repository = $this->em->getRepository('\App\Entities\User');
-        $qb = $repository->createQueryBuilder('b')
-                ->addSelect('a') // This will produce less SQL queries with prefetch.
-                ->innerJoin('b.roles', 'a');
+        $qb = $repository->createQueryBuilder('u')
+                ->select('u, r, a') // This will produce less SQL queries with prefetch.
+                ->leftJoin('u.roles', 'r')
+                ->leftJoin('u.athlete', 'a');
         
-        $model = new \Grido\DataSources\Doctrine($qb);//, array( // Map grido columns to the Author entity
-//            'role' => 'a.role',
-//            'surname' => 'a.surname',
-//            'birthdate' => 'a.surname'
-//        ));
-        $grid->model = $model;
+        $grid->model = new \Grido\DataSources\Doctrine($qb, [
+            'roles' => 'r.id',
+            'label' => 'r.label'
+        ]);
         
-        $grid->setDefaultSort(array('surname' => 'ASC'));
+        $grid->setDefaultSort([
+            'surname' => 'ASC',
+            'firstname' => 'ASC',
+            'label' => 'ASC'
+        ]);
         
         //// Columns ////
-        $grid->addColumnText('id', 'ID');
+//        $grid->addColumnText('id', 'ID');
+        
+        $grid->addColumnText('surname', 'Příjmení')
+                ->setCustomRender(__DIR__ . '\surname.latte')
+                ->setSortable()
+                ->setFilterText()
+                    ->setSuggestion();
+        
+        $grid->addColumnText('firstname', 'Jméno')
+                ->setSortable()
+                ->setFilterText()
+                    ->setSuggestion();
 
-        $grid->addColumnText('username', 'Username')
+        $grid->addColumnText('username', 'Uživatelské jméno')
                 ->setSortable()
                 ->setFilterText()
                     ->setSuggestion();
         
-        $grid->addColumnText('surname', 'Surname')
+        $grid->addColumnText('roles', 'Role')
                 ->setSortable()
-                ->setFilterText()
-                    ->setSuggestion();
+                ->setCustomRender(__DIR__ . "\\tag.latte");
         
-        $grid->addColumnText('firstname', 'Firstname')
-                ->setSortable();
-        
-        $grid->addColumnText('roles', 'Roles')
-                ->setCustomRender(function ($user) {
-                    $string = '';
-                    foreach ($user->roles as $role) {
-                        $string .= $role->label . ', ';
-                    }
-                    
-                    return $string;
-                });
-        
+                
         //// Actions ////
-        $grid->addActionHref('detail', 'Detail')
-            ->setIcon('eye-open')
+        $grid->addActionHref('detail', 'Otevřít')
+            ->setIcon('caret-square-o-right')
             ->setDisable(function() {
-                return !$this->presenter->user->isAllowed('athlete', 'detail');
+                return !$this->presenter->user->isAllowed('user', 'detail');
             });
 
-        $grid->addActionHref('edit', 'Edit')
-            ->setIcon('pencil')
+        $grid->addActionHref('edit', 'Upravit')
+            ->setIcon('pencil-square-o')
             ->setDisable(function () {
-                return !$this->presenter->user->isAllowed('athlete', 'edit');
+                return !$this->presenter->user->isAllowed('user', 'edit');
             });
             
-        $grid->addActionHref('remove', 'Remove', 'remove!')
-            ->setIcon('remove')
-            ->setDisable(function () {
-                return !$this->presenter->user->isAllowed('athlete', 'remove');
-            });
-            
+//        $grid->addActionHref('remove', 'Remove', 'remove!')
+//            ->setIcon('remove')
+//            ->setDisable(function () {
+//                return !$this->presenter->user->isAllowed('athlete', 'remove');
+//            });
+//            
+        //// Filters ////
+//        $grid->addFilterSelect('role', 'Role', ['' => 'Vše'] + $this->em->getDao('App\Entities\Role')->findPairs('label'))
+//                ->setColumn('roles');
+
+
         return $grid;
     }
 }

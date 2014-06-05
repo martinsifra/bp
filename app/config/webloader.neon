@@ -17,6 +17,8 @@ webloader:
                 - grido.css
                 - font-awesome.css
                 - bootstrap-datetimepicker.css
+                - typeahead.css
+                - bootstrap-tagsinput.css
                 - {files: ["*.css", "*.less"], from: %appDir%/presenters} # Nette\Utils\Finder support
             filters:
                 - @wlCssFilter
@@ -27,7 +29,6 @@ webloader:
 
         grido:
             files:
-                - typeahead.css
                 - grido.css
 
     js:
@@ -43,6 +44,11 @@ webloader:
                 - chart.min.js
                 - main.js
                 - bootstrap-datetimepicker.min.js
+                - bloodhound.min.js
+                - typeahead.bundle.js             
+#                - typeahead.jquery.min.js
+                - bootstrap-tagsinput.js
+
                 
         grido:
             files:

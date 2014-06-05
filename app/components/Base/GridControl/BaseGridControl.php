@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 /*
  * 
  */
-class GridControl extends Control
+abstract class GridControl extends Control
 {
     
     /** @var \Kdyby\Doctrine\EntityManager */
@@ -19,6 +19,7 @@ class GridControl extends Control
     
     public function __construct(\Kdyby\Doctrine\EntityManager $em, \App\Model\SettingsModel $settings)
     {
+        parent::__construct();
         $this->em = $em;
         $this->settings = $settings;
     }

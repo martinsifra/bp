@@ -1,11 +1,9 @@
 
 {block content}
-<h1 class="page-header">Test's detail</h1>
+<h1 class="page-header">Test <small>{$test->name}</small></h1>
 
 <div class="btn-toolbar" role="toolbar">
-    <div class="btn-group">
-        <!--<a n:href="User:edit $athlete->id" type="button" class="btn btn-default">Edit user</a>-->
-    </div>
+    <a n:href="Test:" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
 </div>
 
 {control entity}

@@ -1,0 +1,42 @@
+
+{block content}
+<h1 class="page-header">Uživatel <small>{$entity->firstname} {$entity->surname}</small></h1>
+
+<div class="btn-toolbar" role="toolbar">
+    <a n:href="User:" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
+    <a n:href="User:edit $entity->id" type="button" class="btn btn-default"><i class="fa fa-edit"></i> Upravit</a>
+    <a n:href="remove! $entity->id" type="button" class="btn btn-default" title="Odstranit"><i class="fa fa-trash-o"></i></a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Osobní údaje</h2>
+        <dl class="dl-horizontal">
+            <dt>Jméno:</dt>
+            <dd>{$entity->firstname}</dd>
+            <dt>Přijímení:</dt>
+            <dd>{$entity->surname}</dd>
+        </dl>
+    </div>
+</div>
+
+{if $entity->coach}
+<div class="row">
+    <div class="col-md-10">
+        <h2>Trenér</h2>
+        <script n:syntax="double">
+            var states_arr = [
+                {{foreach $athletes as $athlete}}
+                    {value:{{$athlete['value']}},text:{{$athlete['text']}}}{{sep}},{{/sep}}
+                {{/foreach}}
+            ];
+        </script>
+        
+        {control coach}
+        {foreach $entity->coach->athletes as $athlete}
+            {$athlete->firstname} {$athlete->surname}
+        {/foreach}
+
+    </div>
+</div>
+{/if}

@@ -87,7 +87,7 @@ class EntityControl extends \App\Components\Base\EntityControl
                 $values->test_id = $this->test_id;
             }
             
-            // TODO: Check all id's validity (user, session, test) - only when new record
+            // TODO: Check all id's validity (athlete, session, test) - only when new record
             $athlete = $this->athletes->find($values->athlete_id);
             $session = $this->sessions->find($values->session_id);
             $test = $this->tests->find($values->test_id);
@@ -104,6 +104,8 @@ class EntityControl extends \App\Components\Base\EntityControl
 
         // 3) Map data from form to entity
         $this->toEntity($values);
+        
+        \Nette\Diagnostics\Debugger::barDump($this->entity->value);
         
         // 4) Persist and flush entity -> redirect to dafeult
         $this->save([$this->entity->athlete->id, $this->entity->session->id], 'Athlete:session');

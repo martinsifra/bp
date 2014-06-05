@@ -27,6 +27,12 @@ class BaseModel extends \Nette\Object
         return $this->dao->save($entity);
     }
     
+    public function saveAll(\App\Entities\IdentifiedEntity $entity)
+    {
+        $this->dao->save($entity);
+        return $this->dao->getEntityManager()->flush();
+    }
+    
     public function findAll()
     {
         return $this->dao->findAll();

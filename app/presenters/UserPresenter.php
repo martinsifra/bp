@@ -8,7 +8,13 @@ namespace App\Presenters;
  */
 class UserPresenter extends BasePresenter
 {
-
+    
+    /** @var \App\Model\UserModel @inject */
+    public $users;
+    
+    /** @var \App\Model\AthleteModel @inject */
+    public $athletes;
+    
     /** @var \Kdyby\Doctrine\EntityManager @inject */
     public $entityManager;
     
@@ -18,53 +24,86 @@ class UserPresenter extends BasePresenter
     /** @var \App\Components\User\IGridControlFactory @inject */
     public $gridControlFactory;
     
-    ///// Actions /////
+    /** @var \App\Components\User\IEntityControlFactory @inject */
+    public $entityControlFactory;
+
+    /** @var \App\Components\User\ICoachControlFactory @inject */
+    public $coachControlFactory;
     
+    
+    ///// Actions /////
     
     /**
      * @secured
      * @resource('user')
      * @privilege('default')
      */
-    public function renderDefault()
+    public function actionDefault($id)
     {
-//        $this->userManager->authenticate(['me@martinsifra.cz', 'heslo']);
-//        $role = new \App\Entities\Role();
-//        $role->name = 'athlete';
-//        $role->label = 'Závodník';
         
-//        $user = new \App\Entities\User();
-//        $user->username = 'me@martinsifra.cz';
-//        $user->password = 'heslo';
-//        //$user->firstname = 'Maritn';
-//        //$user->surname = 'Šifra';
-//        $user->addRole($role);
+    }
 
-//        $user = $this->userManager->findById('1');
-//        $user->addRole($role);        
-        
-//        $this->entityManager->persist($user);
-//        $this->entityManager->flush();
-        
+    /**
+     * @secured
+     * @resource('user')
+     * @privilege('detail')
+     */
+    public function actionDetail($id)
+    {
+        $user = $this->loadItem($this->users, $id);
+        $this->template->entity = $user;
+//        $this['entity']->entity = $user;
+        if ($user->coach) {
+            $this['coach']->entity = $user;
+        }
+        $this->template->athletes = $this->athletes->toMultiSelect();
+//        $this['sessionGrid']->setParams($id);
     }
     
     public function actionEdit($id)
     {
-        
+        $user = $this->loadItem($this->users, $id);
+        $this->template->entity = $user;
+        $this['entity']->entity = $user;
     }
+    
+    //// Other methods ////
+    
+    /**
+     * @param \App\Model\BaseModel $model
+     * @param int $id
+     * @return \Kdyby\Doctrine\Entities\IdentifiedEntity
+     */
+    protected function loadItem($model, $id)
+    {
+        $item = $model->find($id);
+        
+        if (!$item) {
+            $this->flashMessage("Item with id $id does not exist", 'warning');
+            $this->redirect('default');
+        }
+        return $item;
+    }
+    
     
     
     ///// Components /////
 
-    /** @return \App\Components\Athlete\RecordControl */
-//    protected function createComponentRecord()
-//    {
-//        return $this->recordControlFactory->create();
-//    }    
+    /** @return \App\Components\User\EntityControl */
+    protected function createComponentEntity()
+    {
+        return $this->entityControlFactory->create();
+    }    
     
-    /** @return \App\Components\Athlete\GridControl */
+    /** @return \App\Components\User\GridControl */
     protected function createComponentGrid()
     {
         return $this->gridControlFactory->create();
+    }
+    
+    /** @return \App\Components\User\CoachControl */
+    protected function createComponentCoach()
+    {
+        return $this->coachControlFactory->create();
     }
 }

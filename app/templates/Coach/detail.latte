@@ -1,0 +1,41 @@
+
+{block scripts}
+    {include parent}
+    {control jsGrido}
+{/block}
+
+{block content}
+<h1 class="page-header">Trenér <small>{$coach->firstname}&nbsp;{$coach->surname}</small></h1>
+
+<div class="btn-toolbar" role="toolbar">
+    <a n:if="$user->isAllowed('coach','default')" n:href="Coach:" type="button" class="btn btn-default" title="Zpět"><i class="fa fa-level-up fa-rotate-270"></i></a>
+    <a n:if="$user->isAllowed('coach','detail')" n:href="Coach:edit $coach->id" type="button" class="btn btn-default"><i class="fa fa-edit"></i> Upravit</a>
+    <a n:if="$user->isAllowed('coach','delete')" n:href="remove! $coach->id" type="button" class="btn btn-default" title="Odstranit"><i class="fa fa-trash-o"></i></a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Osobní údaje</h2>
+        <dl class="dl-horizontal">
+            <dt>Jméno:</dt>
+            <dd>{$coach->firstname}</dd>
+            <dt>Přijímení:</dt>
+            <dd>{$coach->surname}</dd>
+            {if $coach->user->email}
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:{$coach->user->email}">{$coach->user->email}</a></dd>
+            {/if}
+            {if $coach->user->phone}
+                <dt>Telefon:</dt>
+                <dd>{$coach->user->phone}</dd>
+            {/if}
+        </dl>
+    </div>
+</div>      
+    
+<div class="row">
+    <div class="col-md-5">
+        <h2>Závodníci</h2>
+        {control athleteGrid}
+    </div>
+</div>

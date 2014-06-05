@@ -14,9 +14,21 @@ class RecordGridControl extends \App\Components\Base\GridControl
     /** @var int $session_id */
     private $session_id;
 
+    /** @var \App\Model\TestModel */
+    private $tests;
+    
+    private $results;
 
-    protected function createComponentGrido($name)
+    
+    public function __construct(\Kdyby\Doctrine\EntityManager $em, \App\Model\TestModel $tests) {
+        $this->em = $em; 
+        $this->tests = $tests;
+    }
+
+    protected function createComponentGrido()
     {
+
+        //// Grido ////
         $grid = new \Grido\Grid();
         
         //// Datasource ////
@@ -49,8 +61,8 @@ class RecordGridControl extends \App\Components\Base\GridControl
         
         $grid->addColumnText('value', 'Value')
                 ->setCustomRender(function($record){
-                    if ($record->test->eval) {
-                        return eval($record->test->eval) . '&nbsp;' . $record->test->unit;
+                    if ($record->test->source) {
+                        return $this->results[$record->test->slug]['value'] . '&nbsp;' . $record->test->unit;
                     } else {
                         return $record->value . '&nbsp;' . $record->test->unit;
                     }
@@ -62,18 +74,21 @@ class RecordGridControl extends \App\Components\Base\GridControl
             ->setCustomHref(function($record) {
                 return $this->presenter->link('Athlete:test', [$this->athlete_id, $record->test->id]);
             })
-            ->setIcon('bar-chart-o');
+            ->setIcon('bar-chart-o')
+            ->setDisable(function() {
+                return !$this->presenter->user->isAllowed('athlete', 'test');
+            });
                 
         $grid->addActionHref('detail', 'Upravit', 'Record:detail')
             ->setIcon('edit')
             ->setDisable(function() {
-                return !$this->presenter->user->isAllowed('test', 'detail');
+                return !$this->presenter->user->isAllowed('record', 'detail');
             });
             
         $grid->addActionHref('remove', 'Odstranit', 'remove!')
             ->setIcon('trash-o')
             ->setDisable(function () {
-                return !$this->presenter->user->isAllowed('athlete', 'remove');
+                return !$this->presenter->user->isAllowed('record', 'remove');
             });
 
         return $grid;
@@ -83,6 +98,27 @@ class RecordGridControl extends \App\Components\Base\GridControl
     {
         $this->athlete_id = $athlete_id;
         $this->session_id = $session_id;
+        
+        
+        
+        // Loading all tests
+        $testsDao = $this->em->getDao(\App\Entities\Test::getClassName());
+        $tests = $testsDao->findAll();
+        
+        $recordsDao = $this->em->getDao(\App\Entities\Record::getClassName());
+        $records = $recordsDao->findBy([
+            'athlete' => $this->athlete_id,
+            'session' => $this->session_id
+        ]);
+
+
+        
+        try {
+            $this->results = $this->tests->evaluate($tests, $records);
+        } catch (\M\ParserException $e) {
+            \Nette\Diagnostics\Debugger::barDump($e->getMessage());
+            $this->presenter->flashMessage('Výpočet hodnot záznamů obsahuje chyby. Čekejte na opravu administrátorem.', 'warning');
+            $this->getPresenter()->forward('Athlete:detail', $this->athlete_id);
+        }
     }
-    
 }

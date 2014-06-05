@@ -51,11 +51,9 @@ services:
     - App\RouterFactory
     router: @App\RouterFactory::createRouter
 
-
-    # Model
-    - App\Model\BookModel(@doctrine.dao(App\Entities\Book)) # TODO: Delete
-
+    # Model classes
     - App\Model\AthleteModel(@doctrine.dao(App\Entities\Athlete))
+    - App\Model\CoachModel(@doctrine.dao(App\Entities\Coach))
     - App\Model\RecordModel(@doctrine.dao(App\Entities\Record))
     - App\Model\RoleModel(@doctrine.dao(App\Entities\Role))
     - App\Model\SessionModel(@doctrine.dao(App\Entities\Session))
@@ -70,6 +68,12 @@ services:
     - App\Components\Athlete\IRecordGridControlFactory
     - App\Components\Athlete\ISessionGridControlFactory
     - App\Components\Athlete\ITestGridControlFactory
+    - App\Components\Athlete\ICoachGridControlFactory
+
+    # Coaches' components
+    - App\Components\Coach\IAthleteGridControlFactory
+    - App\Components\Coach\IEntityControlFactory
+    - App\Components\Coach\IGridControlFactory
 
     # Records' components
     - App\Components\Record\IEntityControlFactory
@@ -96,6 +100,8 @@ services:
 
     # User' components
     - App\Components\User\IGridControlFactory
+    - App\Components\User\IEntityControlFactory
+    - App\Components\User\ICoachControlFactory
 
     # Authorizator
     authorizator:
@@ -104,11 +110,13 @@ services:
             # Role
             - addRole('authenticated')
             - addRole('athlete', 'authenticated')
-            - addRole('admin', 'athlete')
+            - addRole('coach', 'athlete')
+            - addRole('admin', 'coach')
 
             # Zdroje
             - addResource('account')
             - addResource('athlete')
+            - addResource('coach')
             - addResource('homepage')
             - addResource('record')
             - addResource('session')
@@ -117,4 +125,9 @@ services:
 
             # Privilegia
             - allow('athlete', ['homepage'])
+            - allow('athlete', 'athlete', ['detail','session','test'])
+            - allow('coach', ['athlete', 'coach'], 'detail')
             - allow('admin')
+
+    cacheStorage:
+        class: Nette\Caching\Storages\FileStorage(%tempDir%/cache)

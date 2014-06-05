@@ -83,23 +83,30 @@ class EntityControl extends \App\Components\Base\EntityControl
     protected function toArray()
     {
         return [
-            'username' => $this->entity->username,
-            'firstname' => $this->entity->firstname,
-            'surname' => $this->entity->surname,
+            'username' => $this->entity->user->username,
+            'firstname' => $this->entity->user->firstname,
+            'surname' => $this->entity->user->surname,
             'birthdate' => $this->entity->birthdate->format('j.n.Y'),
             'sex' => $this->entity->sex,
-            'email' => $this->entity->email
+            'email' => $this->entity->user->email
         ];
     }
     
     
     protected function toEntity($values)
     {
-        $this->entity->password = "$2y$10$6y7exPNgXqn/T6nvBeYOz.pnDYHj6Q.xy6h1EheJvUW2lbXBEyx8O"; // 'heslo';
-        $this->entity->firstname = $values->firstname;
-        $this->entity->surname = $values->surname;
+//        $user = $this->entity->user;
+//
+//        $user->firstname = $values->firstname;
+//        $user->surname = $values->surname;
+        
+        $this->entity->user->password = "$2y$10$6y7exPNgXqn/T6nvBeYOz.pnDYHj6Q.xy6h1EheJvUW2lbXBEyx8O"; // 'heslo';
+        $this->entity->user->firstname = $values->firstname;
+        $this->entity->user->surname = $values->surname;
         $this->entity->birthdate = \Nette\DateTime::from($values->birthdate);
         $this->entity->sex = $values->sex;
-        $this->entity->email = $values->email;
+        
+//        $this->entity->user = $user;
+        $this->entity->user->email = $values->email;
     }
 }

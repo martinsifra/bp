@@ -1,0 +1,15 @@
+{if $item->roles}
+    {foreach $item->roles as $role}
+        {if $role->name == 'athlete'}
+            {var $color = 'label-success'}
+        {elseif $role->name == 'admin'}
+            {var $color = 'label-primary'}
+        {elseif $role->name == 'coach'}
+            {var $color = 'label-warning'}
+        {else}
+            {var $color = 'label-default'}
+        {/if}
+
+        <span class="label {$color}">{$role->label}</span>
+    {/foreach}
+{/if}

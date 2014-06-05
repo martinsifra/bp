@@ -14,6 +14,16 @@ use Nette\Security as NS,
  */
 class SignInControl extends Control {
     
+    /** @var \App\Model\UserModel $users */
+    private $users;
+
+
+    public function __construct(\App\Model\UserModel $users)
+    {
+        parent::__construct();
+        $this->users = $users;
+    }
+
     public function render()
     {
         $template = $this->template;
@@ -52,12 +62,20 @@ class SignInControl extends Control {
 		} else {
 			$this->presenter->getUser()->setExpiration('20 minutes', TRUE);
 		}
-
+        
 		try {
 			$this->presenter->getUser()->login($values->username, $values->password);
             $this->presenter->restoreRequest($this->presenter->backlink);
-			$this->presenter->redirect('Homepage:');
 
+            $user = $this->users->find($this->presenter->user->id);
+            
+            if ($this->presenter->user->isInRole('admin')) {
+                $this->presenter->redirect('Dashboard:');
+            } elseif ($this->presenter->user->isInRole('coach')) {
+                $this->presenter->redirect('Coach:detail', [$user->coach->id]);
+            } elseif ($this->presenter->user->isInRole('athlete')) {
+                $this->presenter->redirect('Athlete:detail', [$user->athlete->id]);
+            }
 		} catch (Nette\Security\AuthenticationException $e) {
 			$form->addError('Incorrect login or password!');
 		}

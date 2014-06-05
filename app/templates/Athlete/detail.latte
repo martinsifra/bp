@@ -20,13 +20,28 @@
             <dd>{$athlete->birthdate|date:'j.n.Y'}</dd>
             <dt>Pohlaví:</dt>
             <dd>{$athlete->sex}</dd>
+            {if $athlete->user->email}
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:{$athlete->user->email}">{$athlete->user->email}</a></dd>
+            {/if}
+            {if $athlete->user->phone}
+                <dt>Telefon:</dt>
+                <dd>{$athlete->user->phone}</dd>
+            {/if}
         </dl>
     </div>
 </div>
         
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-6">
         <h2>Měření</h2>
         {control sessionGrid}
+    </div>
+</div>
+    
+<div class="row">
+    <div class="col-md-3">
+        <h2>Trenéři</h2>
+        {control coachGrid}
     </div>
 </div>

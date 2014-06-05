@@ -14,7 +14,7 @@ abstract class EntityControl extends Control
           REDIRECT = 'Dashboard:';
 
 
-    /** @var \Kdyby\Doctrine\Entities\IdentifiedEntity */
+    /** @var \App\Entities\IdentifiedEntity */
     protected $entity = NULL;
     
     /** @var \App\Model\BaseModel */
@@ -48,21 +48,14 @@ abstract class EntityControl extends Control
     public function save($redirect_args, $redirect = 'Dashboard:')
     {
         try {
-            $this->model->save($this->entity);
+            $this->model->saveAll($this->entity);
             $this->presenter->flashMessage(self::ON_SUCCESS, 'success');
-            $this->presenter->restoreRequest($this->presenter->backlink);
+            if ($this->presenter->backlink) {
+                $this->presenter->restoreRequest($this->presenter->backlink);
+            }
             $this->presenter->redirect($redirect, $redirect_args);
         } catch (\Kdyby\Doctrine\DuplicateEntryException $e) {
             $this['form']->addError('Tento záznam již v databázi existuje.', 'warning');
         }
     }
-   
-    /**
-     * 
-     */
-//    abstract protected function toArray();
- 
-    
-    /** @param array */
-//    abstract protected function toEntity($array);
 }

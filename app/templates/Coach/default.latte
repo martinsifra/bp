@@ -1,0 +1,17 @@
+{block scripts}
+    {include parent}
+    {control jsGrido}
+{/block}
+
+{block content}
+<h1 class="page-header">Přehled trenérů</h1>
+
+<div class="btn-toolbar" role="toolbar">
+    <a href="new" type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Nový trenér</a>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        {control grid}
+    </div>
+</div>

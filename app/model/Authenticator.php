@@ -75,7 +75,15 @@ class Authenticator implements Nette\Security\IAuthenticator
             'surname' => $row->surname,
             'roles' => $rolesLabeled
         ];
-
+        
+        if ($row->athlete) {
+            $data['athlete'] = $row->athlete->id;
+        }
+        
+        if ($row->coach) {
+            $data['coach'] = $row->coach->id;
+        }
+        
 		return new Nette\Security\Identity($row->id, $roles, $data);
 	}
 

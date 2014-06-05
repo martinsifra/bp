@@ -39,8 +39,11 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{$user->identity->username} <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-lg"></i> {$user->identity->firstname}&nbsp;{$user->identity->surname} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li n:ifset="$user->identity->coach"><a n:href="Coach:detail $user->identity->coach"><i class="fa fa-bullhorn"></i> Trenér</a></li>
+                            <li n:ifset="$user->identity->athlete"><a n:href="Athlete:detail $user->identity->athlete"><i class="fa fa-trophy"></i> Závodník</a></li>
+                            <li role="presentation" class="divider"></li>
                             <li>{control signOut:icon}</li>
                         </ul>
                     </li>
@@ -59,6 +62,7 @@
                         <li {ifCurrent Athlete:*}class="active"{/ifCurrent}><a n:href="Athlete:"><i class="fa fa-users"></i> Athletes</a></li>
                         <li {ifCurrent Session:*}class="active"{/ifCurrent}><a n:href="Session:"><i class="fa fa-calendar-o"></i> Sessions</a></li>
                         <li {ifCurrent User:*}class="active"{/ifCurrent}><a n:href="User:"><i class="fa fa-users"></i> Users</a></li>
+                        <li {ifCurrent Coach:*}class="active"{/ifCurrent}><a n:href="Coach:"><i class="fa fa-bullhorn"></i> Coach</a></li>
                         <li {ifCurrent Test:*}class="active"{/ifCurrent}><a n:href="Test:"><i class="fa fa-file-text"></i> Tests</a></li>
                     </ul>
                 </div>
