@@ -1,7 +1,6 @@
-{translator profile.template}
 
 {block content}
-<h1 n:block="title">{_signIn.h1}</h1>
+<h1 n:block="title">{_profile.template.signIn.h1}</h1>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -9,8 +8,5 @@
     </div>
 </div>
 <p>
-	{!_signIn.linkToForgotten, [href => $presenter->link('//Sign:forgotten')]}.
+	{!_profile.template.signIn.linkToForgotten, [href => $presenter->link('//Sign:forgotten')]}.
 </p>
-{/block}
-
-{/translator}
