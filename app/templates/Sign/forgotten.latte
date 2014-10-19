@@ -1,15 +1,13 @@
-{var $robots = noindex}
 
 {block content}
-<h1>Zapoměli jste heslo?</h1>
-<p>Pokud jste zapoměli heslo, stačí zadat svůj e-mail a zašleme Vám odkaz, kde si heslo vyresetujete. Prostě jednoduché jak facka.
+<h1 n:block="title">{_'profile.template.forgotten.h1'}</h1>
+<p>{_'profile.template.forgotten.perex'}</p>
 
 <div class="panel panel-default">
     <div class="panel-body">
         {control forgotten}
-
-        <p>
-            <a n:href="Sign:in">Zpět na přihlášení</a>
-        </p>
     </div>
 </div>
+<p>
+	<a n:href="Sign:in">{_'profile.template.default.backToSignIn'}</a>
+</p>

@@ -1,10 +1,12 @@
-{var $robots = noindex}
 
-{block #content}
-<h1>Přihlášení do systému</h1>
+{block content}
+<h1 n:block="title">{_'profile.template.signIn.h1'}</h1>
 
 <div class="panel panel-default">
     <div class="panel-body">
         {control signIn}
     </div>
 </div>
+<p>
+	{!_'profile.template.signIn.linkToForgotten', [href => $presenter->link('//Sign:forgotten')]}.
+</p>

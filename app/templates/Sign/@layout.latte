@@ -3,10 +3,10 @@
 
 {block layout}
     <div class="container">
-        <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+        <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{_$flash->message}</div>
         <div class="row">
             <div class="col-sm-4 col-sm-push-4"> {* TODO: Resposivity *}
-                {include #content}
+				{include #content}
             </div>
         </div>
     </div>

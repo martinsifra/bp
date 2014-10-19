@@ -1,11 +1,15 @@
+
 {var $robots = noindex}
 
 {block content}
-<h1>Obnovení hesla</h1>
-<p>Pro obnovení hesla zadejte prosím nové heslo do systému. Vaše stávající heslo bude poté deaktivováno.</p>
+<h1 n:block="title">{_'profile.template.recovery.h1'}</h1>
+<p>{_'profile.template.recovery.perex'}</p>
 
-{control recovery}
-
+<div class="panel panel-default">
+    <div class="panel-body">
+		{control recovery}	
+	</div>
+</div>
 <p>
-    <a n:href="Sign:in">Zpět na přihlášení</a>
+	<a n:href="Sign:in">{_'profile.template.default.backToSignIn'}</a>
 </p>
