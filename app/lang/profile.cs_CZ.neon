@@ -1,0 +1,43 @@
+flash:
+	expiredToken: 'Platnost odkazu pro obnovení hesla vypršela. Požádejte prosím o změnu hesla znovu.'
+	emailNotFound: 'Uživatel s touto e-mailovou adresou neexistuje.'
+	recoveryTokenSent: 'Odkaz pro obnovení hesla byl odeslán na Váš e-mail.'
+	newPasswordSet: 'Nové heslo bylo nastaveno.'
+	signOut: 'Odhlášení proběhlo úspěšně.'
+
+form:
+	error:
+		incorrectCredentials: 'Zadali jste chybný e-mail nebo heslo.'
+	label:
+		newPassword: 'Nové heslo:'
+		passwordAgain: 'Potvrďte heslo:'
+		rememberLogin: 'Neodhlašovat'
+		
+	required:
+		newPassword: 'Zadejte prosím nové heslo.'
+		passwordAgain: 'Zadejte nové heslo ještě jednou pro kontrolu.'
+
+	rule:
+		passwordMinLength: 'Heslo musí být dlouhé alespoň %d znaků.'
+		passwordEqual: 'Hesla se musí shodovat!'
+
+	submit:
+		forgotten: 'Odeslat žádost'
+		setNewPassword: 'Nastavit nové heslo'
+		signIn: 'Přihlásit se'
+
+template:
+	default:
+		backToSignIn: 'Zpět na přihlášení'
+
+	forgotten:
+		h1: 'Zapoměli jste heslo?'
+		perex: 'Pokud jste zapoměli heslo, stačí zadat svůj e-mail a zašleme Vám odkaz, kde si heslo vyresetujete. Prostě jednoduché jak facka.'
+
+	recovery:
+		h1: 'Obnovení hesla'
+		perex: 'Pro obnovení hesla zadejte prosím nové heslo do systému. Vaše stávající heslo bude poté deaktivováno.'
+
+	signIn:
+		h1: 'Přihlášení do systému'
+		linkToForgotten: 'Zapomněli jste heslo? Můžete jej snadno <a href="%href%">obnovit</a>'

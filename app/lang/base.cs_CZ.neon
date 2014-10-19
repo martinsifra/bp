@@ -1,0 +1,11 @@
+form:
+	label:
+		email: 'E-mail:'
+		password: 'Heslo:'
+
+	required:
+		email: 'Zadejte prosím svou e-mailovou adresu.'
+		password: 'Zadejte prosím své heslo.'
+
+	rule:
+		email: 'E-mail není ve správném formátu.'
