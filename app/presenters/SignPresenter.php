@@ -2,88 +2,66 @@
 
 namespace App\Presenters;
 
-/**
- * Sign in/out presenters.
- */
+use App\Components\Profile;
+
 class SignPresenter extends BasePresenter
 {
-    const
-        REDIRECT_DEST = 'Dashboard:'; // Redirect destination for logged in users
 
-    
-    /** @persistent */
-    public $backlink = '';
-    
-    /** @var \App\Components\ISignInControlFactory @inject */
-    public $signInControlFactory;
-    
-    /** @var \App\Components\IForgottenControlFactory @inject */
-    public $forgottenControlFactory;
-    
-    /** @var \App\Components\IRecoveryControlFactory @inject */
-    public $recoveryControlFactory;
-    
-    protected function startup() {
-        parent::startup();
-        
-        // LoggedIn user redirect away
-        if ($this->user->isLoggedIn()) {
-            $this->redirect(self::REDIRECT_DEST);
-        }
-    }
-    
-    
-    public function actionIn()
-    {
+	/** @persistent */
+	public $backlink = '';
 
-    }
-    
-    public function actionForgotten()
-    {
-        
-    }
-    
-    
-    public function actionRecovery()
-    {
-        
-    }
-    
-    
-    public function actionRegister()
-    {
-        
-    }
+	/** @var Profile\ISignInControlFactory @inject */
+	public $iSignInControlFactory;
 
+	/** @var Profile\IForgottenControlFactory @inject */
+	public $iForgottenControlFactory;
 
+	/** @var Profile\IRecoveryControlFactory @inject */
+	public $iRecoveryControlFactory;
 
+	protected function startup()
+	{
+		parent::startup();
 
-    ///// Components /////
-    
-    /*
-     * SignIn control.
-     * @return \App\Components\GridBookControl
-     */
-    protected function createComponentSignIn()
-    {
-        return $this->signInControlFactory->create();
-    }
+		// LoggedIn user redirect away
+		if ($this->user->isLoggedIn()) {
+			$this->redirect('Dashboard:');
+		}
+	}
+	
+	public function actionForgotten()
+	{
+		
+	}
 
-    /**
-     * Forgotten password form control
-     * @return \App\Components\ForgottenControl
-     */
-    protected function createComponentForgotten()
-    {
-        return $this->forgottenControlFactory->create();
-    }
+	public function actionIn()
+	{
+		
+	}
 
-    /**
-     * Recovery password form control
-     * @return \App\Components\RecoveryControl
-     */
-    protected function createComponentRecovery()
-    {
-        return $this->recoveryControlFactory->create();
-    }    
+	public function actionRecovery($token)
+	{
+		$this['recovery']->setToken($token);
+	}
+
+	///// Components /////
+
+	/** @return Profile\SignInControl */
+	protected function createComponentSignIn()
+	{
+		return $this->iSignInControlFactory->create();
+	}
+
+	/** @return Profile\ForgottenControl */
+	protected function createComponentForgotten()
+	{
+		return $this->iForgottenControlFactory->create();
+	}
+
+	/** @return Profile\RecoveryControl */
+	protected function createComponentRecovery()
+	{
+		return $this->iRecoveryControlFactory->create();
+	}
+
 }
